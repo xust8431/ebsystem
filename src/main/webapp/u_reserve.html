@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>实验预约管理服务</title>
+    <link href="styles/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="styles/bootstrap/bootstrap-theme.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles/main.css">
+    <script src="scripts/jquery.min.js"></script>
+    <script src="scripts/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+                <a class="navbar-brand" href="login.html">实验预约管理服务</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <!-- <li><a href="login.html">登录</a></li> -->
+                    <li>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        登录<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="#">信誉度&nbsp;&nbsp;&nbsp;<b>3</b></a>
+                            </li>
+                            <li class="divider"></li>
+                            <li><a href="#">注销</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container top-margin">
+        <div class="row clearfix">
+            <div class="col-md-2 column">
+            </div>
+            <div class="col-md-8 column">
+
+                <ul id="myTab" class="nav nav-tabs">
+                    <li class="active"><a href="#mine" data-toggle="tab">我的预约</a></li>
+                    <li><a href="#reserve" data-toggle="tab">预约实验</a></li>
+                    <li><a href="#info" data-toggle="tab">我的信息</a></li>
+                </ul>
+                <div id="myTabContent" class="tab-content">
+                    <div class="tab-pane fade in active top" id="mine">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        实验名称
+                                    </th>
+                                    <th>
+                                        开始时间
+                                    </th>
+                                    <th>
+                                        结束时间
+                                    </th>
+                                    <th>
+                                        申请时间
+                                    </th>
+                                    <th>
+                                        状态
+                                    </th>
+                                    <th>
+                                        取消
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="success">
+                                    <td>
+                                        检测金属氧化物
+                                    </td>
+                                    <td>
+                                        2017-7-1 14:00:00
+                                    </td>
+                                    <td>
+                                        2017-7-1 18:00:00
+                                    </td>
+                                    <td>
+                                        2017-6-30 11:00:00
+                                    </td>
+                                    <td>
+                                        <a href="javascript:check();">已完成</a>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-warning btn-xs">
+                                            &nbsp;&nbsp;<span class="glyphicon glyphicon-remove"></span>&nbsp;&nbsp;
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr class="info">
+                                    <td>
+                                        金属化合物检测
+                                    </td>
+                                    <td>
+                                        2017-7-8 8:00:00
+                                    </td>
+                                    <td>
+                                        2017-7-8 12:00:00
+                                    </td>
+                                    <td>
+                                        2017-7-5 14:00:00
+                                    </td>
+                                    <td>
+                                        <a href="javascript:check();">未完成</a>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-warning btn-xs">
+                                            &nbsp;&nbsp;<span class="glyphicon glyphicon-remove"></span>&nbsp;&nbsp;
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr class="warning">
+                                    <td>
+                                        金属检测
+                                    </td>
+                                    <td>
+                                        2017-7-8 8:00:00
+                                    </td>
+                                    <td>
+                                        2017-7-8 12:00:00
+                                    </td>
+                                    <td>
+                                        2017-7-5 14:00:00
+                                    </td>
+                                    <td>
+                                        <a href="javascript:check();">未审核</a>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-warning btn-xs">
+                                            &nbsp;&nbsp;<span class="glyphicon glyphicon-remove"></span>&nbsp;&nbsp;
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade top" id="reserve">
+                        <span>实验预约项目 :</span>
+                        <select class="btn btn-default">    
+                            <option>---</option>
+                            <option>实验项目一</option>
+                            <option>实验项目二</option>
+                            <option>实验项目三</option>
+                        </select>
+                        <span>实验时长 :</span>
+                        <select class="btn btn-default">
+                            <option>---</option>
+                            <option>2 小 时</option>
+                            <option>4 小 时</option>
+                            <option>6 小 时</option>
+                            <option>8 小 时</option>
+                        </select>
+                        <span>实验时间 :</span>
+                        <select class="btn btn-default">
+                            <option>---</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                            <option>2107-7-8 08：00：00</option>
+                        </select>
+                        <button class="btn btn-default">确定预约</button>
+                    </div>
+                    <div class="tab-pane fade top" id="info">
+                        <div class="content">
+                            <div class="wrap">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span> 用户信息 </div>
+                                    <table class="table table-bordered detail-view">
+                                        <tr>
+                                            <th>用户名(不可修改)</th>
+                                            <td>nick</td>
+                                        </tr>
+                                        <tr>
+                                            <th>真实姓名(不可修改)</th>
+                                            <td>name</td>
+                                        </tr>
+                                        <tr>
+                                            <th>联系电话</th>
+                                            <td><input type="text" name="" value="123456789"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>备用电话</th>
+                                            <td><input type="text" value="123456789"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>工作单位</th>
+                                            <td><input type="text" value="xust"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>电子邮箱</th>
+                                            <td><input type="email" value="123456789@email.com"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>密码</th>
+                                            <td><input type="text" value="123456"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>信誉度(不可修改)</th>
+                                            <td><input type="text" value="3" readonly></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="div-right">
+                            <button class="btn btn-success">确认修改</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-2 column">
+        </div>
+    </div>
+    </div>
+    <script>
+        function check() {
+            alert("这里是未通过审核的原因\n审核通过则提示完成或需要去完成");
+        }
+    </script>
+</body>
+
+</html>

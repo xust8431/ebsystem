@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>实验预约管理服务</title>
+    <link href="styles/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="styles/bootstrap/bootstrap-theme.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles/main.css">
+    <script src="scripts/jquery.min.js"></script>
+    <script src="scripts/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+                <a class="navbar-brand" href="login.html">实验预约管理服务</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <!-- <li><a href="login.html">登录</a></li> -->
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container top-margin">
+        <div class="row clearfix">
+            <div class="col-md-4 column">
+            </div>
+            <div class="col-md-4 column">
+                <div id="login-body" class="top">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="name" value="用户名 / 联系电话" data-toggle="tooltip" title="可使用用户名或者联系电话登录" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control" name="password" value="" data-toggle="tooltip" title="请输入6位-16位密码" />
+                            </div>
+                        </div>
+                        <div class="form-groupr div-center">
+                            <div class="col-sm-10">
+                                <input type="radio" name="checkuser" value="1" checked/>&nbsp;用户登录&nbsp;&nbsp;
+                                <input type="radio" name="checkuser" value="2" />&nbsp;管理员登录
+                            </div>
+                        </div>
+                        <div class="form-group div-center">
+                            <div class="col-sm-10">
+                                <button type="button" class="btn btn-success">登录</button> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <button type="button" class="btn btn-info" id="btn-regist">注册</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div id="regist-body">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="nick" value="用户名(必填项)" data-toggle="tooltip" title="用户名可以作为登录名" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="name" value="真实姓名(填写后不可修改)" data-toggle="tooltip" title="请输入您的真实姓名" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control" name="password" value="" data-toggle="tooltip" title="请输入6位-16位的密码" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control" name="password" value="" data-toggle="tooltip" title="请再次输入相同的密码" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="nick" value="联系电话(必填项)" data-toggle="tooltip" title="请输入您的联系方式" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="nick" value="备用电话" data-toggle="tooltip" title="请输入您的备用联系方式" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="nick" value="工作单位" data-toggle="tooltip" title="请输入您的工作单位" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-10">
+                                <input type="email" class="form-control" name="password" value="邮箱" data-toggle="tooltip" title="请输入邮箱" />
+                            </div>
+                        </div>
+                        <div class="form-group div-center">
+                            <div class="col-sm-10">
+                                <button type="button" class="btn btn-success">注册</button> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <button type="button" class="btn btn-info" id="btn-return">返回</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-4 column">
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(function() {
+            $("#regist-body").hide();
+            $("#login-body").show();
+            //提示工具显示
+            $("[data-toggle='tooltip']").tooltip();
+            //弹出提示框
+            $(".close").click(function() {
+                $("#message").alert();
+            });
+
+            $("#btn-regist").click(function() {
+                $("#login-body").slideUp(1, function() {
+                    $("#login-body").hide();
+                    $("#regist-body").show();
+                });
+            });
+            $("#btn-return").click(function() {
+                $("#regist-body").slideUp(1, function() {
+                    $("#regist-body").hide();
+                    $("#login-body").show();
+                });
+            });
+            $(":input").not(":input[type=submit],:input[type=button]").focus(function() {
+                if ($(this).val() == this.defaultValue) {
+                    $(this).val("");
+                }
+                $(".close").click();
+            }).blur(function() {
+                if ($(this).val() == "") {
+                    $(this).val(this.defaultValue);
+                }
+                $(".close").click();
+            });
+        });
+    </script>
+</body>
+
+</html>
