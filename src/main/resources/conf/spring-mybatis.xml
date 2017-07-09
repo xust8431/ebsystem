@@ -19,43 +19,36 @@
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd">
-	<!-- 定义dbcp组件DataSource -->
-	<bean id="dbcp" 
-class="org.apache.commons.dbcp.BasicDataSource">
-		<property name="username" value="root">
-		</property>
-		<property name="password" value="123456">
-		</property>
-		<property name="driverClassName"
-			value="com.mysql.jdbc.Driver">   
-		</property>
-		<property name="url" 
-		value="jdbc:mysql://localhost:3306/exper?useUnicode=true&amp;characterEncoding=utf8">
-		</property>
-	</bean>
-	
-	<!-- 定义SqlSessionFactory -->
-	<bean id="ssf" 
-class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="dataSource" ref="dbcp">
-		</property>
-		<property name="mapperLocations"
-			value="classpath:mapper/*.xml">
-		</property>
-	</bean>
-	<!-- 定义MapperScannerConfigurer -->
-	<bean id="mapperScanner" 
-class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage"
-			value="xust.ebs.dao">
-		</property>
-		<!-- sqlSessionFactory可以省略不写 -->
-		<property name="sqlSessionFactory" 
-			ref="ssf">
-		</property>
-	</bean>
-	
 
+<!-- 读取db.properties配置 -->
+<util:properties id="jdbc" location="classpath:conf/db.properties"/>
+<!-- 配置DataSource -->
+<bean id="dbcp" class="org.apache.commons.dbcp.BasicDataSource"  destroy-method="close">
+	<property name="driverClassName" value="#{jdbc.driver }">
+	</property>
+ 	<property name="url" value="#{jdbc.url }">
+ 	</property>
+ 	<property name="username" value="#{jdbc.user }">
+ 	</property>
+ 	<property name="password" value="#{jdbc.pwd }">
+ 	</property>
+</bean>
+
+<!-- 定义SqlSessionFactory -->
+<bean id="ssf" class="org.mybatis.spring.SqlSessionFactoryBean">
+	<property name="dataSource" ref="dbcp">
+	</property>
+	<property name="mapperLocations" value="classpath:mapper/*.xml">
+	</property>
+</bean>
+<!-- 定义MapperScannerConfigurer -->
+<bean id="mapperScanner" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+	<property name="basePackage" value="xust.ebs.dao">
+	</property>
+	<!-- sqlSessionFactory可以省略不写 -->
+	<property name="sqlSessionFactory" ref="ssf">
+	</property>
+</bean>
 </beans>	
 
 

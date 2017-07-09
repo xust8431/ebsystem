@@ -13,6 +13,16 @@
     <link rel="stylesheet" href="styles/main.css">
     <script src="scripts/jquery.min.js"></script>
     <script src="scripts/bootstrap.min.js"></script>
+    <script type="text/javascript">
+    	$(function() {
+    		var token = getCookie(adminToken);
+    		alert(token);
+    		if(token == null) {
+    			
+    		}
+    		
+    	});
+    </script>
 </head>
 
 <body>
@@ -89,7 +99,7 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="reserve-table">
                                 <tr>
                                     <td>金属氧化物检测</td>
                                     <td>

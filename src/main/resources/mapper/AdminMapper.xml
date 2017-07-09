@@ -5,4 +5,10 @@
  	<select id="findByAdminName" parameterType="string" resultType="xust.ebs.entity.Admin">
  		select * from admin where admin_name = #{adminName}
  	</select>
+ 	<update id="update" parameterType="xust.ebs.entity.Admin">
+ 		UPDATE admin SET
+ 		admin_password=#{admin_password},
+ 		admin_token=#{admin_token}
+ 		WHERE admin_name=#{admin_name}
+ 	</update>
  </mapper>

@@ -20,9 +20,8 @@
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd">
 
-<!-- 案例1：注解 AOP配置 -->
-<context:component-scan 
-	base-package="xust.ebs.aspect"/>
+<!-- 注解 AOP配置 -->
+<context:component-scan base-package="xust.ebs.aspect"/>
 <!-- 开启AOP注解标记的使用,例如@Aspect,@Before,@After -->
 <aop:aspectj-autoproxy />
 

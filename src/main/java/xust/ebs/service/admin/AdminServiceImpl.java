@@ -32,6 +32,11 @@ public class AdminServiceImpl implements AdminService{
 				result.setMsg("密码错误");
 				return result;
 			}
+			
+			//更新管理员token
+			String token = EbsUtil.createId();
+			admin.setAdmin_token(token);
+			adminDao.update(admin);
 			result.setStatus(0);
 			result.setMsg("登录成功");
 			result.setData(admin);

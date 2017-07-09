@@ -5,7 +5,9 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import xust.ebs.dao.AdminDao;
 import xust.ebs.dao.UserDao;
+import xust.ebs.entity.Admin;
 import xust.ebs.entity.User;
 import xust.ebs.service.user.UserService;
 import xust.ebs.service.user.UserServiceImpl;
@@ -41,4 +43,33 @@ public class TestUser {
 		EbsResult<User> result = userService.checkLogin("123", "123456", "1");
 		System.out.println(result.getMsg());
 	}
+	
+	@Test
+	public void test3(){
+		AdminDao dao = ac.getBean("adminDao",AdminDao.class);
+		Admin admin = new Admin();
+		admin.setAdmin_name("admin");
+		admin.setAdmin_password("123456");
+		admin.setAdmin_token("abcdefghijklmnopqrstuvwxyz");
+		dao.update(admin);
+		
+	}
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
