@@ -13,6 +13,37 @@
     <link rel="stylesheet" href="styles/main.css">
     <script src="scripts/jquery.min.js"></script>
     <script src="scripts/bootstrap.min.js"></script>
+    <script type="text/javascript" src="scripts/cookie_util.js"></script>
+    <script type="text/javascript" src="scripts/basevalue.js"></script>
+    <script type="text/javascript" src="scripts/login.js"></script>
+    <script type="text/javascript">
+    	$(function(){
+    		var value = 1;
+    		$("#radio1").click(function(){
+       			value = 1;
+       		});
+    		$("#radio2").click(function(){
+       			value = 2;
+       		});
+    		$("#login").click(function() {
+    			login(value);
+    		});
+    		//按回车键登录
+        	document.onkeydown = function(event_e){
+    			console.log(event_e);
+        		if(window.event) {
+	        		event_e = window.event;
+	        	}
+	        		var int_keycode = event_e.charCode||event_e.keyCode;
+	        		if( int_keycode == '13' ) {
+	        		//your handler function,please.
+	        		login(value);
+	        		return false;
+	        		}
+        	};
+        	$("#regist").click(regist);
+    	})
+    </script>
 </head>
 
 <body>
@@ -43,23 +74,23 @@
                     <form class="form-horizontal" role="form">
                         <div class="form-group">
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="name" value="用户名 / 联系电话" data-toggle="tooltip" title="可使用用户名或者联系电话登录" />
+                                <input type="text" class="form-control" name="name" id="name" placeholder="用户名 / 联系电话" data-toggle="tooltip" title="可使用用户名或者联系电话登录" />
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-10">
-                                <input type="password" class="form-control" name="password" value="" data-toggle="tooltip" title="请输入6位-16位密码" />
+                                <input type="password" class="form-control" name="password" id="password" value="" data-toggle="tooltip" title="请输入6位-16位密码" />
                             </div>
                         </div>
                         <div class="form-groupr div-center">
-                            <div class="col-sm-10">
-                                <input type="radio" name="checkuser" value="1" checked/>&nbsp;用户登录&nbsp;&nbsp;
-                                <input type="radio" name="checkuser" value="2" />&nbsp;管理员登录
+                            <div class="col-sm-10" id="input">
+                                <input type="radio" name="checkuser" value="1" id="radio1" checked/>&nbsp;用户登录&nbsp;&nbsp;
+                                <input type="radio" name="checkuser" value="2" id="radio2" />&nbsp;管理员登录
                             </div>
                         </div>
                         <div class="form-group div-center">
                             <div class="col-sm-10">
-                                <button type="button" class="btn btn-success">登录</button> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <button type="button" class="btn btn-success" id="login">登录</button> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 <button type="button" class="btn btn-info" id="btn-regist">注册</button>
                             </div>
                         </div>
@@ -69,47 +100,47 @@
                     <form class="form-horizontal" role="form">
                         <div class="form-group">
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="nick" value="用户名(必填项)" data-toggle="tooltip" title="用户名可以作为登录名" />
+                                <input type="text" class="form-control" name="nick" placeholder="用户名(必填项)" data-toggle="tooltip" title="用户名可以作为登录名" id="userNick"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="name" value="真实姓名(填写后不可修改)" data-toggle="tooltip" title="请输入您的真实姓名" />
+                                <input type="text" class="form-control" name="name" placeholder="真实姓名(填写后不可修改)" data-toggle="tooltip" title="请输入您的真实姓名" id="userName"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-10">
-                                <input type="password" class="form-control" name="password" value="" data-toggle="tooltip" title="请输入6位-16位的密码" />
+                                <input type="password" class="form-control" name="password" placeholder="密码(必填项)" data-toggle="tooltip" title="请输入6位-16位的密码" id="userPassword"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-10">
-                                <input type="password" class="form-control" name="password" value="" data-toggle="tooltip" title="请再次输入相同的密码" />
+                                <input type="password" class="form-control" name="password" placeholder="确认密码(必填项)" data-toggle="tooltip" title="请再次输入相同的密码" id="userPassword2"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="nick" value="联系电话(必填项)" data-toggle="tooltip" title="请输入您的联系方式" />
+                                <input type="text" class="form-control" name="nick" placeholder="联系电话(必填项)" data-toggle="tooltip" title="请输入您的联系方式" id="userPhone"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="nick" value="备用电话" data-toggle="tooltip" title="请输入您的备用联系方式" />
+                                <input type="text" class="form-control" name="nick" placeholder="备用电话" data-toggle="tooltip" title="请输入您的备用联系方式" id="userTel"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="nick" value="工作单位" data-toggle="tooltip" title="请输入您的工作单位" />
+                                <input type="text" class="form-control" name="nick" placeholder="工作单位" data-toggle="tooltip" title="请输入您的工作单位" id="userCompany"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-10">
-                                <input type="email" class="form-control" name="password" value="邮箱" data-toggle="tooltip" title="请输入邮箱" />
+                                <input type="email" class="form-control" name="password" placeholder="邮箱" data-toggle="tooltip" title="请输入邮箱" id="userEmail"/>
                             </div>
                         </div>
                         <div class="form-group div-center">
                             <div class="col-sm-10">
-                                <button type="button" class="btn btn-success">注册</button> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <button type="button" class="btn btn-success" id="regist">注册</button> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 <button type="button" class="btn btn-info" id="btn-return">返回</button>
                             </div>
                         </div>

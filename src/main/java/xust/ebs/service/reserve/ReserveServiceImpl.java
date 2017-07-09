@@ -26,6 +26,7 @@ public class ReserveServiceImpl implements ReserveService{
 	@Resource
 	private ReserveDao reserveDao;
 	
+	//预约实验
 	public EbsResult<Object> addReserveMsg(String userNick, String item, String hour, String date, String startTime,
 			String endTime, String reputation) throws Exception {
 		EbsResult<Object> result = new EbsResult<Object>();
@@ -59,5 +60,18 @@ public class ReserveServiceImpl implements ReserveService{
 		return result;
 	}
 	
-	
+	//查看已预约的实验
+	public EbsResult<List<Reserve>> selectReserveMsg(String userNick) {
+		EbsResult<List<Reserve>> result = new EbsResult<List<Reserve>>();
+		List<Reserve> list = reserveDao.findByNick(userNick);
+		if(list == null){
+			result.setStatus(1);
+			result.setMsg("您还没有预约实验");
+			return result;
+		}
+		result.setStatus(0);
+		result.setMsg("查询成功");
+		result.setData(list);
+		return result;
+	}
 }
