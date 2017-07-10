@@ -13,13 +13,50 @@
     <link rel="stylesheet" href="styles/main.css">
     <script src="scripts/jquery.min.js"></script>
     <script src="scripts/bootstrap.min.js"></script>
+    <script src="scripts/cookie_util.js" type="text/javascript"></script>
+    <script src="scripts/basevalue.js" type="text/javascript"></script>
+    <script src="scripts/a_reserve.js" type="text/javascript"></script>
     <script type="text/javascript">
+    	var status = 1;
     	$(function() {
-    		var token = getCookie(adminToken);
-    		alert(token);
-    		if(token == null) {
-    			
-    		}
+    		//点击<a>改变查询状态
+    		$("#a1").click(function(){
+    			$("#select-status a").removeClass("active");
+    			$(this).addClass("active");
+    			status = 1;
+    			loadReserve();
+    		});
+    		$("#a2").click(function(){
+    			$("#select-status a").removeClass("active");
+    			$(this).addClass("active");
+    			status = 2;
+    			loadReserve();
+    		});
+    		$("#a3").click(function(){
+    			$("#select-status a").removeClass("active");
+    			$(this).addClass("active");
+    			status = 3;
+    			loadReserve();
+    		});
+    		$("#reserve-table").on("click", ".examine_true", function() {
+    			var id = $(this).parents("tr").data("reserveId");
+    			examine(id, 1);
+    		});
+    		$("#reserve-table").on("click", ".examine_false", function() {
+    			var id = $(this).parents("tr").data("reserveId");
+    			examine(id, 2);
+    		});
+    		$("#reserve-table").on("click", ".completed", completed);
+    		
+    		$("#reserve-li").click(function() {
+    			loadReserve();
+    		});
+    		$("#userinfo-li").click(function() {
+    			loadUserinfo();
+    		});
+    		
+
+    		$("#a1").click();
     		
     	});
     </script>
@@ -59,111 +96,34 @@
             <div class="col-md-8 column">
 
                 <ul id="myTab" class="nav nav-tabs">
-                    <li class="active"><a href="#mine" data-toggle="tab">实验预约列表</a></li>
-                    <li><a href="#users" data-toggle="tab">用户信息列表</a></li>
+                    <li class="active" id="reserve-li"><a href="#mine" data-toggle="tab">实验预约列表</a></li>
+                    <li id="userinfo-li"><a href="#users" data-toggle="tab">用户信息列表</a></li>
                     <li><a href="#manage" data-toggle="tab">预约管理列表</a></li>
                 </ul>
                 <div id="myTabContent" class="tab-content">
                     <div class="tab-pane fade in active top" id="mine">
                         <div class="div-center">
                             <h3>实验预约列表</h3>
-                            <div class="">
-                                <a href="#" class="active">待审核</a>
-                                <a href="#">待确认</a>
-                                <a href="#">已完成</a>
+                            <div class="" id="select-status">
+                                <a id="a1" href="#" class="active">待审核</a>
+                                <a id="a2" href="#">待确认</a>
+                                <a id="a3" href="#">已完成</a>
                             </div>
                         </div>
                         <table class="top table table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <th>
-                                        实验名称
-                                    </th>
-                                    <th>
-                                        开始时间
-                                    </th>
-                                    <th>
-                                        结束时间
-                                    </th>
-                                    <th>
-                                        申请时间
-                                    </th>
-                                    <th>
-                                        申请人
-                                    </th>
-                                    <th>
-                                        审核状态
-                                    </th>
-                                    <th>
-                                        完成状态
-                                    </th>
+                                    <th>实验名称</th>
+                                    <th>日期</th>
+                                    <th>开始时间</th>
+                                    <th>结束时间</th>
+                                    <th>申请时间</th>
+                                    <th>申请人</th>
+                                    <th>审核状态</th>
+                                    <th>完成状态</th>
                                 </tr>
                             </thead>
                             <tbody id="reserve-table">
-                                <tr>
-                                    <td>金属氧化物检测</td>
-                                    <td>
-                                        2017-7-8 8:00:00
-                                    </td>
-                                    <td>
-                                        2017-7-8 12:00:00
-                                    </td>
-                                    <td>
-                                        2017-7-5 14:00:00
-                                    </td>
-                                    <td>
-                                        陈冠希
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-success btn-xs">通过</button>
-                                        <button class="btn btn-warning btn-xs">拒绝</button>
-                                    </td>
-                                    <td>
-                                        未完成
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>金属氧化物检测</td>
-                                    <td>
-                                        2017-7-8 8:00:00
-                                    </td>
-                                    <td>
-                                        2017-7-8 12:00:00
-                                    </td>
-                                    <td>
-                                        2017-7-5 14:00:00
-                                    </td>
-                                    <td>
-                                        陈冠希
-                                    </td>
-                                    <td>
-                                        已完成
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-success btn-xs">确认完成</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>金属氧化物检测</td>
-                                    <td>
-                                        2017-7-8 8:00:00
-                                    </td>
-                                    <td>
-                                        2017-7-8 12:00:00
-                                    </td>
-                                    <td>
-                                        2017-7-5 14:00:00
-                                    </td>
-                                    <td>
-                                        陈冠希
-                                    </td>
-                                    <td>
-                                        已完成
-                                    </td>
-                                    <td>
-                                        已确认
-                                    </td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -171,7 +131,7 @@
                         <div class="content">
                             <div class="wrap">
                                 <div class="panel panel-default">
-                                    <table class="table table-bordered detail-view">
+                                    <table id="user-info-table" class="table table-bordered detail-view">
                                         <tr>
                                             <th>用户名</th>
                                             <td>真实姓名</td>
@@ -180,33 +140,6 @@
                                             <td>工作单位</td>
                                             <td>电子邮箱</td>
                                             <td>信誉度</td>
-                                        </tr>
-                                        <tr>
-                                            <th>nick</th>
-                                            <td>name</td>
-                                            <td>123456789</td>
-                                            <td>123456789</td>
-                                            <td>xust</td>
-                                            <td>123456789@email.com</td>
-                                            <td>3</td>
-                                        </tr>
-                                        <tr>
-                                            <th>nick</th>
-                                            <td>name</td>
-                                            <td>123456789</td>
-                                            <td>123456789</td>
-                                            <td>xust</td>
-                                            <td>123456789@email.com</td>
-                                            <td>3</td>
-                                        </tr>
-                                        <tr>
-                                            <th>nick</th>
-                                            <td>name</td>
-                                            <td>123456789</td>
-                                            <td>123456789</td>
-                                            <td>xust</td>
-                                            <td>123456789@email.com</td>
-                                            <td>3</td>
                                         </tr>
                                     </table>
                                 </div>

@@ -11,4 +11,7 @@
  		values (#{user_nick},#{user_name},#{user_phone},#{user_tel},#{user_company},#{user_email},
  		#{user_password})
  	</insert>
+ 	<select id="findAll" resultType="xust.ebs.entity.User">
+ 		SELECT * FROM user
+ 	</select>
  </mapper>

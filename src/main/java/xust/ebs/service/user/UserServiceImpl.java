@@ -1,5 +1,7 @@
 package xust.ebs.service.user;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -69,6 +71,20 @@ public class UserServiceImpl implements UserService{
 		userDao.save(user);
 		result.setStatus(0);
 		result.setMsg("注册成功");
+		return result;
+	}
+
+	public EbsResult<List<User>> loadUserinfo() {
+		EbsResult<List<User>> result = new EbsResult<List<User>>();
+		List<User> users = userDao.findAll();
+		if(users.size() != 0) {
+			result.setStatus(0);
+			result.setMsg("查询成功");
+			result.setData(users);
+		} else {
+			result.setStatus(1);
+			result.setMsg("无联系人存在");
+		}
 		return result;
 	}
 }

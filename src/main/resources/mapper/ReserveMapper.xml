@@ -15,4 +15,25 @@
  	<select id="findByNick" parameterType="string" resultType="xust.ebs.entity.Reserve">
  		select * from reserve where user_nick = #{userNick}
  	</select>
+ 	<select id="loadReserve" parameterType="map" resultType="xust.ebs.entity.Reserve">
+ 		SELECT *
+		FROM reserve
+		WHERE 1
+		<if test="examine_status != null">
+			AND reserve_examine_status=#{examine_status}
+		</if>
+		<if test="complete_status != null">
+			AND reserve_complete_status=#{complete_status}
+		</if>
+ 	</select>
+ 	<update id="updateExamine" parameterType="map">
+ 		UPDATE reserve SET
+ 		reserve_examine_status=#{status}
+ 		WHERE reserve_id=#{reserveId}
+ 	</update>
+ 	<update id="updateCompleted" parameterType="string">
+ 		UPDATE reserve SET
+ 		reserve_complete_status='1'
+ 		WHERE reserve_id=#{reserveId}
+ 	</update>
  </mapper>
