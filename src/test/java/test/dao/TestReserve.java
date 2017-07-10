@@ -9,6 +9,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import xust.ebs.dao.ReserveDao;
 import xust.ebs.entity.Reserve;
+import xust.ebs.service.reserve.ReserveService;
+import xust.ebs.util.EbsResult;
 
 public class TestReserve {
 
@@ -31,5 +33,19 @@ public class TestReserve {
 			return;
 		}
 		System.out.println(re.get(0).getReserve_endtime());
+	}
+	
+	@Test
+	public void test2(){
+		ReserveDao dao = ac.getBean("reserveDao",ReserveDao.class);
+		List<Reserve> re = dao.findByNick("demo");
+		System.out.println(re.get(0).getReserve_time());
+	}
+	
+	@Test
+	public void test3(){
+		ReserveService re = ac.getBean("reserveService",ReserveService.class);
+		EbsResult<List<Reserve>> result = re.selectReserveMsg("demo");
+		System.out.println(result.getData().get(0).getReserve_time());
 	}
 }

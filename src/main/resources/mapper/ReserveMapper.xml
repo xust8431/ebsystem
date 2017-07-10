@@ -13,6 +13,6 @@
  		#{reserve_time})
  	</insert>
  	<select id="findByNick" parameterType="string" resultType="xust.ebs.entity.Reserve">
- 		select * from reserve where user_nick = #{userNick}
+ 		select * from reserve where user_nick = #{userNick} order by reserve_time
  	</select>
  </mapper>

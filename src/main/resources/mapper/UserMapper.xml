@@ -11,4 +11,8 @@
  		values (#{user_nick},#{user_name},#{user_phone},#{user_tel},#{user_company},#{user_email},
  		#{user_password})
  	</insert>
+ 	<update id="update">
+ 		update user set user_phone = #{user_phone},user_tel = #{user_tel},user_company = #{user_company},
+ 		user_email = #{user_email},user_password = #{user_password} where user_nick = #{user_nick}
+ 	</update>
  </mapper>
