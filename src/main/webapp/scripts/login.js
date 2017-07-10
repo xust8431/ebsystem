@@ -23,13 +23,14 @@ function login(value){
 	        				success:function(result){
 	        					if(result.status == 0){
 	        						var userNick = result.data.user_nick;
-	        						var userPassword = result.data.user_password;
 	        						var userReputation = result.data.user_reputation;
 	        						var userPhone = result.data.user_phone;
+	        						var userName = result.data.user_name;
 	        						addCookie("userNick",userNick,2);
-	        						addCookie("userPassword",userPassword,2);
+	        						addCookie("userPassword",password,2);
 	        						addCookie("userReputation",userReputation,2);
 	        						addCookie("userPhone",userPhone,2);
+	        						addCookie("userName",userName,2);
 	        						window.location.href="u_reserve.html";
 	        					}else if(result.status == 1){
 	        						alert(result.msg);

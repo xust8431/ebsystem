@@ -15,10 +15,12 @@
     <script src="scripts/bootstrap.min.js"></script>
     <script type="text/javascript" src="scripts/cookie_util.js"></script>
     <script type="text/javascript" src="scripts/basevalue.js"></script>
+    <script type="text/javascript" src="scripts/u_reserve.js"></script>
+    <script type="text/javascript" src="scripts/json.js"></script>
     <script type="text/javascript">
+    var userNick = getCookie("userNick");
+	var ok = true;
     $(function(){
-    	var userNick = getCookie("userNick");
-    	var ok = true;
     	if(userNick == null){
     		ok = false;
     		alert("您还未登录，请登录后使用");
@@ -26,52 +28,9 @@
     		return;
     	}
     	if(ok){
-    		$.ajax({
-        		url:path+"/reserve/select.do",
-        		type:"post",
-        		data:{"userNick":userNick},
-        		dataType:"json",
-        		success:function(result){
-        			if(result.status == 0){
-        				var datas = result.data;
-        				for(var i=0;i<datas.length;i++){
-        					if(datas[i].reserve_examine_status == 1 && datas[i].reserve_complete_status == 1){
-        						var sli = "";
-        						sli = '<tr class="success">';
-        						sli = '<td>';
-        						sli = datas[i].reserve_item;
-        						sli = '</td>';
-        						sli = '<td>';
-        						sli = datas[i].reserve_date;
-        						sli = '</td>';
-        						sli = '<td>';
-        						sli = datas[i].reserve_starttime;
-        						sli = '</td>';
-        						sli = '<td>';
-        						sli = datas[i].reserve_endtime;
-                                sli = '</td>';
-                                sli = '<td>';
-                                sli = datas[i].reserve_time;
-                                sli = ' </td>';
-                                sli = '<td>';
-                                sli = '   <a href="javascript:check();">已完成</a>';
-                                sli = '</td>';
-                                sli = '<td>';
-                                sli = ' <button class="btn btn-warning btn-xs">';
-                                sli = '   &nbsp;&nbsp;<span class="glyphicon glyphicon-remove"></span>&nbsp;&nbsp;';
-                                sli = ' </button>';
-                                sli = '</td>';
-                                sli = '</tr>';
-                                var $li = $(sli);
-                                $("#thbody").append($li);
-        					}
-        				}
-        			}
-        		},
-        		error:function(){
-        			alert("查看已预约信息失败");
-        		}
-        	});
+    		ReserveMsg(userNick);
+    		showMyMessage(userNick);
+    		$("#update").click(function(){updateUserMsg(userNick)});
     	}
     });
     
@@ -121,7 +80,7 @@
                 </ul>
                 <div id="myTabContent" class="tab-content">
                     <div class="tab-pane fade in active top" id="mine">
-                        <table class="table table-bordered table-hover">
+                        <table class="table table-bordered table-hover" id="table">
                             <thead>
                                 <tr>
                                     <th>
@@ -147,58 +106,9 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody id="thbody">
+                            <tbody id="tbody">
                                
-                                <tr class="info">
-                                     <td>
-                                        检测金属氧化物
-                                    </td>
-                                   	<td>
-                                   		2017-7-1
-                                   	</td>
-                                    <td>
-                                    	14:00:00
-                                    </td>
-                                    <td>
-                                        18:00:00
-                                    </td>
-                                    <td>
-                                        2017-6-30 11:00:00
-                                    </td>
-                                    <td>
-                                        <a href="javascript:check();">未完成</a>
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-warning btn-xs">
-                                            &nbsp;&nbsp;<span class="glyphicon glyphicon-remove"></span>&nbsp;&nbsp;
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr class="warning">
-                                      <td>
-                                        检测金属氧化物
-                                    </td>
-                                   	<td>
-                                   		2017-7-1
-                                   	</td>
-                                    <td>
-                                    	14:00:00
-                                    </td>
-                                    <td>
-                                        18:00:00
-                                    </td>
-                                    <td>
-                                        2017-6-30 11:00:00
-                                    </td>
-                                    <td>
-                                        <a href="javascript:check();">未审核</a>
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-warning btn-xs">
-                                            &nbsp;&nbsp;<span class="glyphicon glyphicon-remove"></span>&nbsp;&nbsp;
-                                        </button>
-                                    </td>
-                                </tr>
+                               
                             </tbody>
                         </table>
                     </div>
@@ -206,9 +116,9 @@
                         <span>实验预约项目 :</span>
                         <select class="btn btn-default">    
                             <option>---</option>
-                            <option>实验项目一</option>
-                            <option>实验项目二</option>
-                            <option>实验项目三</option>
+                            <option>金属成分检测</option>
+                            <option>金属含量检测</option>
+                            <option>化学成分分析</option>
                         </select>
                         <span>实验时长 :</span>
                         <select class="btn btn-default">
@@ -323,45 +233,14 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <span class="glyphicon glyphicon-user" aria-hidden="true"></span> 用户信息 </div>
-                                    <table class="table table-bordered detail-view">
-                                        <tr>
-                                            <th>用户名(不可修改)</th>
-                                            <td>nick</td>
-                                        </tr>
-                                        <tr>
-                                            <th>真实姓名(不可修改)</th>
-                                            <td>name</td>
-                                        </tr>
-                                        <tr>
-                                            <th>联系电话</th>
-                                            <td><input type="text" name="" value="123456789"></td>
-                                        </tr>
-                                        <tr>
-                                            <th>备用电话</th>
-                                            <td><input type="text" value="123456789"></td>
-                                        </tr>
-                                        <tr>
-                                            <th>工作单位</th>
-                                            <td><input type="text" value="xust"></td>
-                                        </tr>
-                                        <tr>
-                                            <th>电子邮箱</th>
-                                            <td><input type="email" value="123456789@email.com"></td>
-                                        </tr>
-                                        <tr>
-                                            <th>密码</th>
-                                            <td><input type="text" value="123456"></td>
-                                        </tr>
-                                        <tr>
-                                            <th>信誉度(不可修改)</th>
-                                            <td><input type="text" value="3" readonly></td>
-                                        </tr>
+                                    <table class="table table-bordered detail-view" id="message_table">
+                                        
                                     </table>
                                 </div>
                             </div>
                         </div>
                         <div class="div-right">
-                            <button class="btn btn-success">确认修改</button>
+                            <button class="btn btn-success" id="update">确认修改</button>
                         </div>
                     </div>
                 </div>

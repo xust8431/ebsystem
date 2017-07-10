@@ -6,4 +6,5 @@ public interface UserDao {
 
 	public User findByNickOrPhone(String nickOrPhone);
 	public void save(User user);
+	public void update(User user);
 }

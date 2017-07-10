@@ -71,4 +71,37 @@ public class UserServiceImpl implements UserService{
 		result.setMsg("注册成功");
 		return result;
 	}
+	
+	public EbsResult<User> showUserMsg(String userNick) {
+		EbsResult<User> result = new EbsResult<User>();
+		User user = userDao.findByNickOrPhone(userNick);
+		if(user == null){
+			result.setStatus(1);
+			result.setMsg("出错啦！！！");
+			return result;
+		}
+		result.setStatus(0);
+		result.setMsg("查询成功");
+		result.setData(user);
+		return result;
+	}
+	
+	public EbsResult<Object> updateUser(String userNick, String userPhone, String userTel, String userCompany,
+			String userEmail, String userPassword) {
+		EbsResult<Object> result = new EbsResult<Object>();
+		User user = new User();
+		user.setUser_nick(userNick);
+		user.setUser_phone(userPhone);
+		//System.out.println(userPhone+"-"+userTel);
+		user.setUser_tel(userTel);
+		user.setUser_company(userCompany);
+		user.setUser_email(userEmail);
+		user.setUser_password(EbsUtil.md5(userPassword));
+		userDao.update(user);
+		
+		result.setStatus(0);
+		result.setMsg("修改成功");
+		//result.setData(user);
+		return result;
+	}
 }
