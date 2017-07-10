@@ -1,5 +1,7 @@
 package xust.ebs.service.user;
 
+import java.util.List;
+
 import xust.ebs.entity.User;
 import xust.ebs.util.EbsResult;
 
@@ -14,4 +16,9 @@ public interface UserService {
 	
 	public EbsResult<Object> updateUser(String userNick, String userPhone, String userTel, String userCompany,
 			String userEmail, String userPassword);//更新用户信息
+	/**
+	 * 加载所有用户信息
+	 * @return
+	 */
+	public EbsResult<List<User>> loadUserinfo();
 }

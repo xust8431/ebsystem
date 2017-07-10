@@ -4,10 +4,11 @@ package xust.ebs.service.reserve;
 
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -74,4 +75,61 @@ public class ReserveServiceImpl implements ReserveService{
 		result.setData(list);
 		return result;
 	}
+
+	public EbsResult<List<Reserve>> loadReserveInfo(String status) {
+		Map<String, String> map = new HashMap<String, String>();
+		List<Reserve> reserves = null;
+		EbsResult<List<Reserve>> result = new EbsResult<List<Reserve>>();
+		if("1".equals(status)) {
+			map.put("examine_status", "0");
+			reserves = reserveDao.loadReserve(map);
+		} else if("2".equals(status)) {
+			map.put("examine_status", "1");
+			map.put("complete_status", "0");
+			reserves = reserveDao.loadReserve(map);
+		} else if("3".equals(status)) {
+			map.put("examine_status", "1");
+			map.put("complete_status", "1");
+			reserves = reserveDao.loadReserve(map);
+		}
+		result.setStatus(0);
+		result.setMsg("查询成功");
+		result.setData(reserves);
+		return result;
+	}
+
+	public EbsResult<Object> examineReserve(String reserveId, String status) {
+		EbsResult<Object> result = new EbsResult<Object>();
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("reserveId", reserveId);
+		map.put("status", status);
+		reserveDao.updateExamine(map);
+		result.setStatus(0);
+		result.setMsg("更新成功");
+		return result;
+	}
+
+	public EbsResult<Object> completedReserve(String reserveId) {
+		EbsResult<Object> result = new EbsResult<Object>();
+		reserveDao.updateCompleted(reserveId);
+		result.setStatus(0);
+		result.setMsg("更新成功");
+		return result;
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
