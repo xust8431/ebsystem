@@ -36,6 +36,14 @@ a:active {
     padding-right: 15px;
 }
 
+.main .width30 {
+	width: 30%
+}
+
+.main .width10 {
+	width: 10%
+}
+
 .main a.active,
 .main a:hover {
     background: #c1c1c1;

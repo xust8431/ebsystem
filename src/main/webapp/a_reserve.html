@@ -16,6 +16,7 @@
     <script src="scripts/cookie_util.js" type="text/javascript"></script>
     <script src="scripts/basevalue.js" type="text/javascript"></script>
     <script src="scripts/a_reserve.js" type="text/javascript"></script>
+    <script src="scripts/systemSet.js" type="text/javascript"></script>
     <script type="text/javascript">
     	var status = 1;
     	$(function() {
@@ -54,6 +55,64 @@
     		$("#userinfo-li").click(function() {
     			loadUserinfo();
     		});
+    		$("#manage-li").click(function() {
+    			loadSet();
+    		});
+    		$("#sure-set").click(function() {
+    			updateSet();
+    		});
+    		$("#ban-time").on("click", ".delete-set", function() {
+    			var $tr = $(this).parents("tr");
+    			deleteSet($tr);
+    		});
+    		
+    		function deleteSet($tr) {
+    			var token = getCookie("adminToken");
+    			var week = $tr.find(".ban-time-th").text();
+    			var time = $tr.find(".ban-time-td").text();
+    			var timeStr = "";
+    			if(week == "星期1") {
+    				timeStr += "1/";
+    			} else if(week == "星期2") {
+    				timeStr += "2/";
+    			} else if(week == "星期3") {
+    				timeStr += "3/";
+    			} else if(week == "星期4") {
+    				timeStr += "4/";
+    			} else if(week == "星期5") {
+    				timeStr += "5/";
+    			} else if(week == "星期6") {
+    				timeStr += "6/";
+    			} else if(week == "星期7") {
+    				timeStr += "7/";
+    			}
+    			timeStr += time;
+    			var ok = true;
+    			if(token == null) {
+    				//ok = false;
+    				console.log("todo");
+    			}
+    			if(ok) {
+    				$.ajax({
+    					url : path+"/set/delete_set.do",
+    					type : "post",
+    					data : {
+    						"adminToken" : token,
+    						"timeStr" : timeStr
+    					},
+    					dataType : "json",
+    					success : function(result) {
+    						if(result.status == 0) {
+    							$("#manage-li").click();
+    						}
+    					},
+    					error : function() {
+    						alert("修改失败");
+    					}
+    				});
+    			}
+    		}
+    		
     		
 
     		$("#a1").click();
@@ -98,7 +157,7 @@
                 <ul id="myTab" class="nav nav-tabs">
                     <li class="active" id="reserve-li"><a href="#mine" data-toggle="tab">实验预约列表</a></li>
                     <li id="userinfo-li"><a href="#users" data-toggle="tab">用户信息列表</a></li>
-                    <li><a href="#manage" data-toggle="tab">预约管理列表</a></li>
+                    <li id="manage-li"><a href="#manage" data-toggle="tab">预约管理列表</a></li>
                 </ul>
                 <div id="myTabContent" class="tab-content">
                     <div class="tab-pane fade in active top" id="mine">
@@ -152,18 +211,8 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span> 禁止预约时间段 </div>
-                                    <table class="table table-bordered detail-view">
-                                        <tr>
-                                            <th>星期五</th>
-                                            <td>14:00:00-18:00:00</td>
-                                            <td class="div-center">
-                                                <button class="btn btn-warning btn-xs">
-                                                    &nbsp;&nbsp;&nbsp;&nbsp;
-                                                    <span class="glyphicon glyphicon-remove"></span>
-                                                    &nbsp;&nbsp;&nbsp;&nbsp;
-                                                </button>
-                                            </td>
-                                        </tr>
+                                    <table id="ban-time" class="table table-bordered detail-view">
+                                       
                                     </table>
                                 </div>
                                 <div class="panel panel-default">
@@ -172,17 +221,26 @@
                                     <table class="table table-bordered detail-view div-center">
                                         <tr>
                                             <th>默认可预约日期范围</th>
-                                            <td><input type="text" name="" value="7"></td>
+                                            <td><input type="text" id="default-scope"></td>
                                         </tr>
                                         <tr>
-                                            <th>禁止时间段</th>
-                                            <td>开始时间</td>
-                                            <td>结束时间</td>
-                                            <td></td>
+                                            <th>预约生效方式</th>
+                                            <td>
+                                            	<select id="mode" class="btn btn-default">
+                                            		<option value="1">管理员确认方式</option>
+                                            		<option value="2">自动生效方式</option>
+                                            	</select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th class="width30">禁止时间段</th>
+                                            <td class="width30">开始时间</td>
+                                            <td class="width30">结束时间</td>
+                                            <td class="width10"></td>
                                         </tr>
                                         <tr>
                                             <th>
-                                                <select class="btn btn-default" name="" id="">
+                                                <select class="btn btn-default" name="" id="week-select">
                                                     <option value="1">星期一</option>
                                                     <option value="2">星期二</option>
                                                     <option value="3">星期三</option>
@@ -194,11 +252,11 @@
                                             </th>
                                             <td>
                                                 <select onchange="select_date();" class="btn btn-default" name="" id="start">
-                                                    <option value="-1">---</option>
-                                                    <option value="0">8:00</option>
-                                                    <option value=1>10:00</option>
-                                                    <option value="2">14:00</option>
-                                                    <option value="3">16:00</option>
+                                                    <option>---</option>
+                                                    <option>8:00</option>
+                                                    <option>10:00</option>
+                                                    <option>14:00</option>
+                                                    <option>16:00</option>
                                                 </select>
                                             </td>
                                             <td>
@@ -206,7 +264,7 @@
                                                 </select>
                                             </td>
                                             <td>
-                                                <button class="btn btn-warning">确认设置</button>
+                                                <button class="btn btn-warning" id="sure-set">确认设置</button>
                                             </td>
                                         </tr>
                                     </table>
@@ -233,7 +291,19 @@
 
         function select_date() {
             $("#end option").remove();
-            var index = $("#start").val();
+            var startData = $("#start").val();
+            var index;
+            if(startData == "8:00") {
+            	index = 0;
+            } else if(startData == "10:00") {
+            	index = 1;
+            } else if(startData == "14:00") {
+            	index = 2;
+            } else if(startData == "16:00") {
+            	index = 3;
+            } else {
+            	index = -1;
+            }
             var ends = times[index];
 
             if (ends) {

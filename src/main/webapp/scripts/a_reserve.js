@@ -23,10 +23,10 @@ function loadUserinfo() {
 		$.ajax({
 			url : path+"/user/load_userinfo.do",
 			type : "post",
-			date : {
+			data : {
 				"adminToken" : token
 			},
-			dateType : "json",
+			dataType : "json",
 			success : function(result) {
 				if(result.status == 0) {
 					var data = result.data;
