@@ -65,56 +65,13 @@
     			var $tr = $(this).parents("tr");
     			deleteSet($tr);
     		});
+    		$("#logout").click(function() {
+    			delCookie("adminToken");
+    			delCookie("adminName");
+    			window.location.href = path + "/login.html";
+    		});   		
     		
-    		function deleteSet($tr) {
-    			var token = getCookie("adminToken");
-    			var week = $tr.find(".ban-time-th").text();
-    			var time = $tr.find(".ban-time-td").text();
-    			var timeStr = "";
-    			if(week == "星期1") {
-    				timeStr += "1/";
-    			} else if(week == "星期2") {
-    				timeStr += "2/";
-    			} else if(week == "星期3") {
-    				timeStr += "3/";
-    			} else if(week == "星期4") {
-    				timeStr += "4/";
-    			} else if(week == "星期5") {
-    				timeStr += "5/";
-    			} else if(week == "星期6") {
-    				timeStr += "6/";
-    			} else if(week == "星期7") {
-    				timeStr += "7/";
-    			}
-    			timeStr += time;
-    			var ok = true;
-    			if(token == null) {
-    				//ok = false;
-    				console.log("todo");
-    			}
-    			if(ok) {
-    				$.ajax({
-    					url : path+"/set/delete_set.do",
-    					type : "post",
-    					data : {
-    						"adminToken" : token,
-    						"timeStr" : timeStr
-    					},
-    					dataType : "json",
-    					success : function(result) {
-    						if(result.status == 0) {
-    							$("#manage-li").click();
-    						}
-    					},
-    					error : function() {
-    						alert("修改失败");
-    					}
-    				});
-    			}
-    		}
-    		
-    		
-
+    		displayLoginFlag();
     		$("#a1").click();
     		
     	});
@@ -137,11 +94,12 @@
                 <ul class="nav navbar-nav navbar-right">
                     <!-- <li><a href="login.html">登录</a></li> -->
                     <li>
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        登录<span class="caret"></span></a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="" id="login-flag">
+                        	<span class="caret"></span>
+                        </a>
                         <ul class="dropdown-menu">
                             <li class="divider"></li>
-                            <li><a href="#">注销</a></li>
+                            <li id="logout"><a href="javascript:;"></a></li>
                         </ul>
                     </li>
                 </ul>

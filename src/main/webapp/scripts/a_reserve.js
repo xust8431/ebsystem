@@ -1,3 +1,62 @@
+//显示登陆标志
+function displayLoginFlag() {
+	var adminName = getCookie("adminName");
+	var adminToken = getCookie("adminToken");
+	if(adminName != null) {
+		$("#login-flag").text(adminName);
+		$("#logout a").text("注销");
+	} else {
+		$("#login-flag").text("登录");
+		$("#logout a").text("登录");
+	}
+}
+//删除禁止时间段设置
+function deleteSet($tr) {
+	var token = getCookie("adminToken");
+	var week = $tr.find(".ban-time-th").text();
+	var time = $tr.find(".ban-time-td").text();
+	var timeStr = "";
+	if(week == "星期1") {
+		timeStr += "1/";
+	} else if(week == "星期2") {
+		timeStr += "2/";
+	} else if(week == "星期3") {
+		timeStr += "3/";
+	} else if(week == "星期4") {
+		timeStr += "4/";
+	} else if(week == "星期5") {
+		timeStr += "5/";
+	} else if(week == "星期6") {
+		timeStr += "6/";
+	} else if(week == "星期7") {
+		timeStr += "7/";
+	}
+	timeStr += time;
+	var ok = true;
+	if(token == null) {
+		//ok = false;
+		console.log("todo");
+	}
+	if(ok) {
+		$.ajax({
+			url : path+"/set/delete_set.do",
+			type : "post",
+			data : {
+				"adminToken" : token,
+				"timeStr" : timeStr
+			},
+			dataType : "json",
+			success : function(result) {
+				if(result.status == 0) {
+					$("#manage-li").click();
+				}
+			},
+			error : function() {
+				alert("修改失败");
+			}
+		});
+	}
+}
 //加载用户信息列表
 function loadUserinfo() {
 	var token = getCookie("adminToken");
