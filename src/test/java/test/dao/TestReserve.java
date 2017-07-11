@@ -1,6 +1,8 @@
 package test.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -27,12 +29,12 @@ public class TestReserve {
 	@Test
 	public void test1(){
 		ReserveDao dao = ac.getBean("reserveDao",ReserveDao.class);
-		List<Reserve> re = dao.selectReserveTime();
-		if(re == null){
-			System.out.println("暂无记录");
-			return;
-		}
-		System.out.println(re.get(0).getReserve_endtime());
+		Reserve re = dao.findByReserveId("a618b24382c147ba984c8c1f53c81206");
+		System.out.println(re.getUser_nick());
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("reserveId", "a618b24382c147ba984c8c1f53c81206");
+		map.put("status", "2");
+		dao.updateCompleted(map);
 	}
 	
 	@Test

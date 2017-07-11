@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
  "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
  <mapper namespace="xust.ebs.dao.ReserveDao">
- 	<select id="selectReserveTime" resultType="xust.ebs.entity.Reserve">
- 		select reserve_date,reserve_starttime,reserve_endtime from reserve
+ 	<select id="selectReserveTime" resultType="xust.ebs.entity.Reserve" parameterType="string">
+ 		select reserve_hour,reserve_starttime,reserve_endtime from reserve where reserve_date=#{reserve_date}
  	</select>
  	<insert id="save" parameterType="xust.ebs.entity.Reserve">
  		insert into reserve (reserve_id,user_nick,reserve_item,reserve_hour,reserve_date,reserve_starttime,
@@ -31,9 +31,12 @@
  		reserve_examine_status=#{status}
  		WHERE reserve_id=#{reserveId}
  	</update>
- 	<update id="updateCompleted" parameterType="string">
+ 	<update id="updateCompleted" parameterType="map">
  		UPDATE reserve SET
- 		reserve_complete_status='1'
+ 		reserve_complete_status=#{status}
  		WHERE reserve_id=#{reserveId}
  	</update>
+ 	<select id="findByReserveId" parameterType="string" resultType="xust.ebs.entity.Reserve">
+ 		select * from reserve where reserve_id = #{reserveId}
+ 	</select>
  </mapper>

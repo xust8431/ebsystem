@@ -4,7 +4,9 @@ package xust.ebs.service.reserve;
 
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -111,9 +113,156 @@ public class ReserveServiceImpl implements ReserveService{
 
 	public EbsResult<Object> completedReserve(String reserveId) {
 		EbsResult<Object> result = new EbsResult<Object>();
-		reserveDao.updateCompleted(reserveId);
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("reserveId", reserveId);
+		map.put("status", "1");
+		reserveDao.updateCompleted(map);
 		result.setStatus(0);
 		result.setMsg("更新成功");
+		return result;
+	}
+	
+	public EbsResult<Object> cancelReserver(String reserveId, String reserveDate) throws Exception {
+		EbsResult<Object> result = new EbsResult<Object>();
+		Map<String, String> map = new HashMap<String, String>();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date date1 = sdf.parse(reserveDate);
+		java.sql.Date d1 = new java.sql.Date(date1.getTime());
+		//获取当前时间
+		Date ndate = new Date();
+		String time = sdf.format(ndate);
+		Date date2 = sdf.parse(time);
+		java.sql.Date d2 = new java.sql.Date(date2.getTime());
+		
+		//比较两个时间差
+		if(EbsUtil.getIntervalDays(d2, d1) < 2){
+			result.setStatus(1);
+			result.setMsg("2个工作日内请电话联系管理员取消预约");
+			return result;
+		}
+		
+		map.put("reserveId", reserveId);
+		map.put("status", "2");
+		reserveDao.updateCompleted(map);
+		result.setStatus(0);
+		result.setMsg("取消预约成功");
+		return result;
+	}
+	
+	
+	public EbsResult<Object> selectReserveDate(String reserveHour, String reserveDate) throws ParseException {
+		EbsResult<Object> result = new EbsResult<Object>();
+		List<Reserve> re = reserveDao.selectReserveTime(reserveDate);//查询数据库已经占用的时间
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = sdf.parse(reserveDate);
+		SimpleDateFormat sdf2 = new SimpleDateFormat("EEEE");
+		SimpleDateFormat sdf3 = new SimpleDateFormat("HH:mm:ss");
+		String week = sdf2.format(date);
+		String time = "08:00:00";
+		Time t = new Time(sdf3.parse(time).getTime());
+		List<String> startTime = new ArrayList<String>();
+		if("星期五".equals(week)){//是否是星期五
+			if(re != null){
+				for(int i=0;i<re.size();i++){
+					if(re.get(i).getReserve_hour() == 2 &&
+							sdf3.format(re.get(i).getReserve_starttime()).equals(time)){//判断时长为2并且8点被用
+						switch(Integer.valueOf(reserveHour)){
+							case 2: startTime.add(t.getHours()+2+":00:00");break;
+						}
+						result.setMsg("星期五上午如果8点被用");
+						result.setData(startTime);
+						result.setStatus(0);
+						return result;
+					}else if(re.get(i).getReserve_hour() == 4){
+						result.setStatus(1);
+						result.setMsg("周五上午已经没时间了");
+						return result;
+					}
+				}
+			}else{
+					switch(Integer.valueOf(reserveHour)){
+					case 2: startTime.add(time);break;
+					case 4:	startTime.add(t.getHours()+2+":00:00");break;
+				}
+					result.setStatus(2);
+					result.setMsg("周五都是空闲时间");
+					result.setData(startTime);
+					return result;
+			}
+			}else{
+				if(re != null){
+					for(int i=0;i<re.size();i++){
+						if(re.get(i).getReserve_hour() == 2 &&
+								sdf3.format(re.get(i).getReserve_starttime()).equals(time)){
+							startTime.clear();
+							switch(Integer.valueOf(reserveHour)){
+							case 2: startTime.add(t.getHours()+6+":00:00");break;
+							case 4: startTime.add(t.getHours()+6+":00:00");break;
+							//case 6: startTime.add(t.getHours()+2+":00:00");break;
+						}
+							result.setStatus(3);
+							result.setMsg("2小时，只有8点被占");
+							result.setData(startTime);
+							//return result;
+						}else if(re.get(i).getReserve_hour() == 2 &&
+								sdf3.format(re.get(i).getReserve_starttime()).equals("14:00:00")){
+							startTime.clear();
+							switch(Integer.valueOf(reserveHour)){
+							case 2: startTime.add(t.getHours()+2+":00:00");
+									startTime.add(t.getHours()+8+":00:00");break;
+						}
+							result.setStatus(4);
+							result.setMsg("2小时，8点和14点被占");
+							result.setData(startTime);
+							//return result;
+						}else if(re.get(i).getReserve_hour() == 4 &&
+								sdf3.format(re.get(i).getReserve_starttime()).equals("8:00:00")){
+							startTime.clear();
+							switch(Integer.valueOf(reserveHour)){
+							case 2: startTime.add(t.getHours()+6+":00:00");break;
+							case 4: startTime.add(t.getHours()+6+":00:00");break;
+						}
+							result.setStatus(5);
+							result.setMsg("4小时，8点被占");
+							result.setData(startTime);
+							//return result;
+					}else if(re.get(i).getReserve_hour() == 6 &&
+							sdf3.format(re.get(i).getReserve_starttime()).equals("8:00:00")){
+						startTime.clear();
+						switch(Integer.valueOf(reserveHour)){
+						case 2: startTime.add(t.getHours()+8+":00:00");break;
+					}
+						result.setStatus(6);
+						result.setMsg("6小时，8点被占");
+						result.setData(startTime);
+						//return result;
+				}else if(re.get(i).getReserve_hour() == 8 &&
+						sdf3.format(re.get(i).getReserve_starttime()).equals("8:00:00")){
+					startTime.clear();
+					result.setStatus(7);
+					result.setMsg("这一天没有空闲时间");
+					//return result;
+				}
+			}
+				}else{
+					switch(Integer.valueOf(reserveHour)){
+					case 2: startTime.add(time);
+							startTime.add(t.getHours()+6+":00:00");
+							break;
+					case 4: startTime.add(time);
+							startTime.add(t.getHours()+6+":00:00");
+							break;
+					case 6: startTime.add(time);break;
+					case 8:	startTime.add(time);break;
+				}
+					result.setStatus(8);
+					result.setMsg("一天时间都是空闲的");
+					result.setData(startTime);
+					//return result;
+				}
+	}
+//		result.setStatus(9);
+//		result.setMsg("指定时间有误");
 		return result;
 	}
 }

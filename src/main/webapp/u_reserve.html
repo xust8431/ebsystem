@@ -20,6 +20,7 @@
     <script type="text/javascript">
     var userNick = getCookie("userNick");
 	var ok = true;
+	
     $(function(){
     	if(userNick == null){
     		ok = false;
@@ -31,7 +32,43 @@
     		ReserveMsg(userNick);
     		showMyMessage(userNick);
     		$("#update").click(function(){updateUserMsg(userNick)});
+    		$("#tbody").on("click", ".delete-button", function(){cancelReserve(userNick)});
+    		dateSelect();//拼接日期下拉选
+    		$("#sure").click(function(){
+    			var reserveItem = $("#item").val();
+    			console.log(reserveItem);
+    			var reserveHour = $("#hour").val();
+    			console.log(reserveHour);
+    			if(reserveItem == ""){
+    				ok = false;
+    				alert("您没有选择实验项目");
+    				return ;
+    			}
+    			if(reserveHour == ""){
+    				ok = false;
+    				alert("您没有选择时长");
+    				return ;
+    			}
+    			
+    			if(ok){
+    				$.ajax({
+    					url:path+"/reserve/addReserve.do",
+    					type:"post",
+    					data:{"reserveItem":reserveItem,"reserveHour":reserveHour},
+    					dataType:"json",
+    					success:function(result){
+    						if(result.status == 0){
+    							
+    						}
+    					},
+    					error:function(){
+    						alert("预约失败");
+    					}
+    				});
+    			}
+    		});
     	}
+
     });
     
     </script>
@@ -114,118 +151,30 @@
                     </div>
                     <div class="tab-pane fade top" id="reserve">
                         <span>实验预约项目 :</span>
-                        <select class="btn btn-default">    
+                        <select class="btn btn-default" id="item">    
                             <option>---</option>
-                            <option>金属成分检测</option>
-                            <option>金属含量检测</option>
-                            <option>化学成分分析</option>
+                            <option>实验A</option>
+                            <option>实验B</option>
+                            <option>实验C</option>
+                            <option>实验D</option>
                         </select>
                         <span>实验时长 :</span>
-                        <select class="btn btn-default">
+                        <select class="btn btn-default" id="hour">
                             <option>---</option>
-                            <option>2 小 时</option>
-                            <option>4 小 时</option>
-                            <option>6 小 时</option>
-                            <option>8 小 时</option>
+                            <option>2小 时</option>
+                            <option>4小 时</option>
+                            <option>6小 时</option>
+                            <option>8小 时</option>
                         </select>
-                        <span>实验时间 :</span>
-                        <select class="btn btn-default">
+                        <span>实验日期 :</span>
+                        <select class="btn btn-default" id="date" onchange="SelectDate()">
                             <option>---</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
-                            <option>2107-7-8 08：00：00</option>
                         </select>
-                        <button class="btn btn-default">确定预约</button>
+                        <span>开始时间 :</span>
+                        <select class="btn btn-default" id="startTime">
+                            <option>---</option>
+                        </select>
+                        <button class="btn btn-default" id="sure">确定预约</button>
                     </div>
                     <div class="tab-pane fade top" id="info">
                         <div class="content">

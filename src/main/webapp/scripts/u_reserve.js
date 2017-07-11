@@ -17,6 +17,7 @@ function ReserveMsg(userNick){
 					var id = datas[i].reserve_id;
 					var sli = "";
 					var $li = null;
+					//$("#tbody").remove();
 					if(datas[i].reserve_examine_status == 1 && datas[i].reserve_complete_status == 1){
 						sli = '<tr class="success">';
 						sli += '<td>';
@@ -44,7 +45,7 @@ function ReserveMsg(userNick){
                         $("#tbody").append($li);
 					}
 					if(datas[i].reserve_examine_status == 2 && datas[i].reserve_complete_status == 0 ){
-							sli += '<tr class="info">';
+							sli += '<tr class="defeat">';
 							sli += '<td>';
 							sli += item;
 							sli += '</td>';
@@ -90,7 +91,7 @@ function ReserveMsg(userNick){
                         sli += '   <a href="javascript:check();">未完成</a>';
                         sli += '</td>';
                         sli += '<td>';
-                        sli += ' <button class="btn btn-warning btn-xs">';
+                        sli += ' <button class="btn btn-warning btn-xs delete-button">';
                         sli += '   &nbsp;&nbsp;<span class="glyphicon glyphicon-remove"></span>&nbsp;&nbsp;';
                         sli += ' </button>';
                         sli += '</td>';
@@ -121,7 +122,7 @@ function ReserveMsg(userNick){
                         sli += '   <a href="javascript:check();">待审核</a>';
                         sli += '</td>';
                         sli += '<td>';
-                        sli += ' <button class="btn btn-warning btn-xs">';
+                        sli += ' <button class="btn btn-warning btn-xs delete-button">';
                         sli += '   &nbsp;&nbsp;<span class="glyphicon glyphicon-remove"></span>&nbsp;&nbsp;';
                         sli += ' </button>';
                         sli += '</td>';
@@ -130,8 +131,8 @@ function ReserveMsg(userNick){
                         $li.data("id",id);
                         $("#tbody").append($li);
 					}
-					if(datas[i].complete_status == 2){
-						sli += '<tr class="info">';
+					if(datas[i].reserve_complete_status == 2){
+						sli += '<tr class="cancel">';
 						sli += '<td>';
 						sli += item;
 						sli += '</td>';
@@ -263,4 +264,109 @@ function updateUserMsg(userNick){
 			alert("修改信息失败");
 		}
 	});
+}
+
+function cancelReserve(userNick){
+	var id = $(this).parents("tr").data("id");
+	var date = $(this).parent().parent().find("td").eq(1).text();
+	$.ajax({
+		url:path+"/reserve/updateCancel.do",
+		type:"post",
+		data:{"reserveId":id,"reserveDate":date},
+		dataType:"json",
+		success:function(result){
+			if(result.status == 0){
+				$("#tbody tr").remove();
+				ReserveMsg(userNick);
+				alert(result.msg);
+			}else if(result.status == 1){
+				alert(result.msg);
+			}
+		},
+		error:function(){
+			alert("取消预约失败");
+		}
+	});
+}
+
+//拼接时间下拉选
+function SelectTime(result){
+	var startTime = result.data;
+	var i;
+	var sli;
+	var $li;
+	//var startTime = map.startTime;
+	//console.log(startTime);
+	for(i=0;i<startTime.length;i++){
+		$("#startTime option").remove();
+		sli = "";
+		sli +='<option>---</option>';
+		sli +='<option>'+startTime[i]+'</option>';
+		$li = $(sli);
+		$("#startTime").append($li);
+	}
+}
+//拼接日期下拉选
+function dateSelect() {
+	var i;
+	var sli;
+	var $li;
+	var time = [];
+	time = getNowFormatDate();
+	for(i=0;i<time.length;i++){
+		sli = "";
+		sli +='<option>'+time[i]+'</option>';
+		$li = $(sli);
+		$("#date").append($li);
+	}
+}
+
+//日期下拉框点击事件
+function SelectDate(){
+	var reserveItem = $("#item").val();
+	var reserveHour = $("#hour").val().trim().slice(0,1);//截取X小时中的X
+	var reserveDate = $("#date").val();
+	if(reserveItem == ""){
+		ok = false;
+		alert("您没有选择实验项目");
+		return ;
+	}
+	if(reserveHour == ""){
+		ok = false;
+		alert("您没有选择时长");
+		return ;
+	}
+	
+	if(ok){
+		$.ajax({
+			url:path+"/reserve/selectDate.do",
+			type:"post",
+			data:{"reserveHour":reserveHour,"reserveDate":reserveDate},
+			dataType:"json",
+			success:function(result){
+				if(result.status == 0){
+					SelectTime(result);	
+				} else if(result.status == 1){
+					alert(result.msg);
+				}else if(result.status == 2){
+					SelectTime(result);
+				}else if(result.status == 3){
+					SelectTime(result);
+				}else if(result.status == 4){
+					SelectTime(result);
+				}else if(result.status == 5){
+					SelectTime(result);
+				}else if(result.status == 6){
+					SelectTime(result);
+				}else if(result.status == 7){
+					alert(result.msg);
+				}else if(result.status == 8){
+					SelectTime(result);
+				}
+			},
+			error:function(){
+				alert("选择实验日期失败");
+			}
+		});
+	}
 }

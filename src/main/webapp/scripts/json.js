@@ -1,3 +1,4 @@
+//JSON毫秒数转换成timestamp
 function json2TimeStamp(milliseconds){
         var datetime = new Date();
         datetime.setTime(milliseconds);
@@ -10,3 +11,25 @@ function json2TimeStamp(milliseconds){
         var second = datetime.getSeconds()< 10 ? "0" + datetime.getSeconds() : datetime.getSeconds();
         return year + "-" + month + "-" + date+" "+hour+":"+minute+":"+second;
     }
+
+//在js上获取当前系统时间
+function getNowFormatDate() {
+    var date = new Date();
+    var seperator1 = "-";
+    var seperator2 = ":";
+    var month = date.getMonth() + 1;
+    var strDate = date.getDate();
+    var currentdate;
+    var dateTemp = [];
+    if (month >= 1 && month <= 9) {
+        month = "0" + month;
+    }
+    if (strDate >= 0 && strDate <= 9) {
+        strDate = "0" + strDate;
+    }
+    for(var i=1;i<8;i++){
+    	currentdate = date.getFullYear() + seperator1 + month + seperator1 + (date.getDate()+i);
+    	dateTemp.push(currentdate);
+    }
+    return dateTemp;
+}
