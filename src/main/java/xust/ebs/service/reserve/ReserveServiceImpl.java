@@ -1,7 +1,5 @@
 package xust.ebs.service.reserve;
 
-
-
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -16,7 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import xust.ebs.dao.ReserveDao;
+import xust.ebs.dao.ReserveFailedDao;
 import xust.ebs.entity.Reserve;
+import xust.ebs.entity.ReserveFailed;
 import xust.ebs.util.EbsResult;
 import xust.ebs.util.EbsUtil;
 
@@ -26,6 +26,8 @@ public class ReserveServiceImpl implements ReserveService{
 
 	@Resource
 	private ReserveDao reserveDao;
+	@Resource
+	private ReserveFailedDao reserveFailedDao;
 	
 	//预约实验
 	public EbsResult<Object> addReserveMsg(String userNick, String item, String hour, String date, String startTime,
@@ -98,12 +100,18 @@ public class ReserveServiceImpl implements ReserveService{
 		return result;
 	}
 
-	public EbsResult<Object> examineReserve(String reserveId, String status) {
+	public EbsResult<Object> examineReserve(String reserveId, String status, String reason) {
 		EbsResult<Object> result = new EbsResult<Object>();
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("reserveId", reserveId);
 		map.put("status", status);
 		reserveDao.updateExamine(map);
+		if("2".equals(status)) {
+			ReserveFailed reserve = new ReserveFailed();
+			reserve.setReserve_failed_id(reserveId);
+			reserve.setReserve_failed_reason(reason);
+			reserveFailedDao.save(reserve);
+		}
 		result.setStatus(0);
 		result.setMsg("更新成功");
 		return result;

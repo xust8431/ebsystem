@@ -12,6 +12,7 @@ function displayLoginFlag() {
 }
 //删除禁止时间段设置
 function deleteSet($tr) {
+	var adminName = getCookie("adminName");
 	var token = getCookie("adminToken");
 	var week = $tr.find(".ban-time-th").text();
 	var time = $tr.find(".ban-time-td").text();
@@ -43,12 +44,15 @@ function deleteSet($tr) {
 			type : "post",
 			data : {
 				"adminToken" : token,
+				"adminName" : adminName,
 				"timeStr" : timeStr
 			},
 			dataType : "json",
 			success : function(result) {
 				if(result.status == 0) {
 					$("#manage-li").click();
+				} else if(result.status == -1) {
+					window.location.href = path + "/login.html";
 				}
 			},
 			error : function() {
@@ -59,6 +63,7 @@ function deleteSet($tr) {
 }
 //加载用户信息列表
 function loadUserinfo() {
+	var adminName = getCookie("adminName");
 	var token = getCookie("adminToken");
 	var ok = true;
 	$("#user-info-table tr").remove();
@@ -83,7 +88,8 @@ function loadUserinfo() {
 			url : path+"/user/load_userinfo.do",
 			type : "post",
 			data : {
-				"adminToken" : token
+				"adminToken" : token,
+				"adminName" : adminName
 			},
 			dataType : "json",
 			success : function(result) {
@@ -125,6 +131,8 @@ function loadUserinfo() {
 					}
 				} else if(result.status == 1) {
 					alert(result.msg);
+				} else if(result.status == -1) {
+					window.location.href = path + "/login.html";
 				}
 			},
 			error : function() {
@@ -135,6 +143,7 @@ function loadUserinfo() {
 }
 //确认完成状态
 function completed() {
+	var adminName = getCookie("adminName");
 	var token = getCookie("adminToken");
 	var id = $(this).parents("tr").data("reserveId");
 	var ok = true;
@@ -148,12 +157,15 @@ function completed() {
 			type : "post",
 			data : {
 				"adminToken" : token,
+				"adminName" : adminName,
 				"reserveId" : id
 			},
 			dataType : "json",
 			success : function(result) {
 				if(result.status == 0) {
 					$("#a2").click();
+				} else if(result.status == -1) {
+					window.location.href = path + "/login.html";
 				}
 			},
 			error : function() {
@@ -164,25 +176,38 @@ function completed() {
 }
 //确认审核状态
 function examine(id, status) {
+	var adminName = getCookie("adminName");
 	var token = getCookie("adminToken");
+	var reason;
 	var ok = true;
 	if(token == null) {
 		//ok = false;
 		console.log("todo");
 	}
+	if(status == 2) {
+		reason = prompt("请输入拒绝原因: ", "");
+		if(reason == null || reason == "" || reason == undefined) {
+			ok = false;
+		}
+	}
+	
 	if(ok) {
 		$.ajax({
 			url : path+"/a_reserve/examine_true.do",
 			type : "post",
 			data : {
 				"adminToken" : token,
+				"adminName" : adminName,
 				"reserveId" : id,
-				"status" : status
+				"status" : status,
+				"reason" : reason
 			},
 			dataType : "json",
 			success : function(result) {
 				if(result.status == 0) {
 					$("#a1").click();
+				} else if(result.status == -1) {
+					window.location.href = path + "/login.html";
 				}
 			},
 			error : function() {
@@ -194,6 +219,7 @@ function examine(id, status) {
 
 //加载预约信息表
 function loadReserve() {
+    var adminName = getCookie("adminName");
     var token = getCookie("adminToken");
 	var ok = true;
 	$("#reserve-table tr").remove();
@@ -207,6 +233,7 @@ function loadReserve() {
 			type : "post",
 			data : {
 				"adminToken" : token,
+				"adminName" : adminName,
 				"status" : status
 			},
 			dataType : "json",
@@ -227,7 +254,7 @@ function loadReserve() {
 						date = data[i].reserve_date;
 						start_time = data[i].reserve_starttime
 						end_time = data[i].reserve_endtime;
-						reserve_time = data[i].reserve_time;
+						reserve_time = json2TimeStamp(data[i].reserve_time);
 						
 						var str = "";
 						str += '<tr><td>';
@@ -272,6 +299,8 @@ function loadReserve() {
 						$tr.data("reserveId", id);
 						$("#reserve-table").append($tr);
 					}
+				} else if(result.status == -1) {
+					window.location.href = path + "/login.html";
 				}
 			},
 			error : function() {

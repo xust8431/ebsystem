@@ -14,6 +14,7 @@
     <script src="scripts/jquery.min.js"></script>
     <script src="scripts/bootstrap.min.js"></script>
     <script src="scripts/cookie_util.js" type="text/javascript"></script>
+    <script src="scripts/json.js" type="text/javascript"></script>
     <script src="scripts/basevalue.js" type="text/javascript"></script>
     <script src="scripts/a_reserve.js" type="text/javascript"></script>
     <script src="scripts/systemSet.js" type="text/javascript"></script>
@@ -122,9 +123,9 @@
                         <div class="div-center">
                             <h3>实验预约列表</h3>
                             <div class="" id="select-status">
-                                <a id="a1" href="#" class="active">待审核</a>
-                                <a id="a2" href="#">待确认</a>
-                                <a id="a3" href="#">已完成</a>
+                                <a id="a1" href="" class="active">待审核</a>
+                                <a id="a2" href="">待确认</a>
+                                <a id="a3" href="">已完成</a>
                             </div>
                         </div>
                         <table class="top table table-bordered table-hover">
@@ -211,10 +212,10 @@
                                             <td>
                                                 <select onchange="select_date();" class="btn btn-default" name="" id="start">
                                                     <option>---</option>
-                                                    <option>8:00</option>
-                                                    <option>10:00</option>
-                                                    <option>14:00</option>
-                                                    <option>16:00</option>
+                                                    <option>8:00:00</option>
+                                                    <option>10:00:00</option>
+                                                    <option>14:00:00</option>
+                                                    <option>16:00:00</option>
                                                 </select>
                                             </td>
                                             <td>
@@ -239,10 +240,10 @@
     <script>
         function loadDate() {
             return [
-                ["10:00", "12:00", "16:00", "18:00"],
-                ["12:00", "16:00", "18:00"],
-                ["16:00", "18:00"],
-                ["18:00"]
+                ["10:00:00", "12:00:00", "16:00:00", "18:00:00"],
+                ["12:00:00", "16:00:00", "18:00:00"],
+                ["16:00:00", "18:00:00"],
+                ["18:00:00"]
             ];
         }
         var times = loadDate();
@@ -251,13 +252,13 @@
             $("#end option").remove();
             var startData = $("#start").val();
             var index;
-            if(startData == "8:00") {
+            if(startData == "8:00:00") {
             	index = 0;
-            } else if(startData == "10:00") {
+            } else if(startData == "10:00:00") {
             	index = 1;
-            } else if(startData == "14:00") {
+            } else if(startData == "14:00:00") {
             	index = 2;
-            } else if(startData == "16:00") {
+            } else if(startData == "16:00:00") {
             	index = 3;
             } else {
             	index = -1;

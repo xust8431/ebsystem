@@ -25,7 +25,7 @@ public interface ReserveService {
 	 * @param status
 	 * @return
 	 */
-	public EbsResult<Object> examineReserve(String reserveId, String status);
+	public EbsResult<Object> examineReserve(String reserveId, String status, String reason);
 	/**
 	 * 更新审核状态
 	 * @param reserveId
