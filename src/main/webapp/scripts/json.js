@@ -21,6 +21,7 @@ function getNowFormatDate() {
     var strDate = date.getDate();
     var currentdate;
     var dateTemp = [];
+    
     if (month >= 1 && month <= 9) {
         month = "0" + month;
     }

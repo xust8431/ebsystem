@@ -21,9 +21,9 @@ public class AddReserveController {
 	@ResponseBody
 	
 	public EbsResult<Object> execute(String userNick, String item, String hour, String date, String startTime,
-			String endTime, String reputation) throws Exception{
+			String reputation) throws Exception{
 		EbsResult<Object> result = reserveService.addReserveMsg(userNick, item, hour, date,
-				startTime, endTime, reputation);
+				startTime, reputation);
 		return result;
 	}
 }

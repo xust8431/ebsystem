@@ -2,209 +2,157 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <title>实验预约管理服务</title>
-    <link href="styles/bootstrap/bootstrap.min.css" rel="stylesheet">
-    <link href="styles/bootstrap/bootstrap-theme.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles/main.css">
-    <script src="scripts/jquery.min.js"></script>
-    <script src="scripts/bootstrap.min.js"></script>
-    <script type="text/javascript" src="scripts/cookie_util.js"></script>
-    <script type="text/javascript" src="scripts/basevalue.js"></script>
-    <script type="text/javascript" src="scripts/u_reserve.js"></script>
-    <script type="text/javascript" src="scripts/json.js"></script>
-    <script type="text/javascript">
-    var userNick = getCookie("userNick");
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+<title>实验预约管理服务</title>
+<link href="styles/bootstrap/bootstrap.min.css" rel="stylesheet">
+<link href="styles/bootstrap/bootstrap-theme.min.css" rel="stylesheet">
+<link rel="stylesheet" href="styles/main.css">
+<script src="scripts/jquery.min.js"></script>
+<script src="scripts/bootstrap.min.js"></script>
+<script type="text/javascript" src="scripts/cookie_util.js"></script>
+<script type="text/javascript" src="scripts/basevalue.js"></script>
+<script type="text/javascript" src="scripts/u_reserve.js"></script>
+<script type="text/javascript" src="scripts/json.js"></script>
+<script type="text/javascript">
+	var userNick = getCookie("userNick");
 	var ok = true;
-	
-    $(function(){
-    	if(userNick == null){
-    		ok = false;
-    		alert("您还未登录，请登录后使用");
-    		window.location.href="login.html";
-    		return;
-    	}
-    	if(ok){
-    		ReserveMsg(userNick);
-    		showMyMessage(userNick);
-    		$("#update").click(function(){updateUserMsg(userNick)});
-    		$("#tbody").on("click", ".delete-button", function(){cancelReserve(userNick)});
-    		dateSelect();//拼接日期下拉选
-    		$("#sure").click(function(){
-    			var reserveItem = $("#item").val();
-    			console.log(reserveItem);
-    			var reserveHour = $("#hour").val();
-    			console.log(reserveHour);
-    			if(reserveItem == ""){
-    				ok = false;
-    				alert("您没有选择实验项目");
-    				return ;
-    			}
-    			if(reserveHour == ""){
-    				ok = false;
-    				alert("您没有选择时长");
-    				return ;
-    			}
-    			
-    			if(ok){
-    				$.ajax({
-    					url:path+"/reserve/addReserve.do",
-    					type:"post",
-    					data:{"reserveItem":reserveItem,"reserveHour":reserveHour},
-    					dataType:"json",
-    					success:function(result){
-    						if(result.status == 0){
-    							
-    						}
-    					},
-    					error:function(){
-    						alert("预约失败");
-    					}
-    				});
-    			}
-    		});
-    	}
+	$(function() {
+		if (userNick == null) {
+			ok = false;
+			alert("您还未登录，请登录后使用");
+			window.location.href = "login.html";
+			return;
+		}
+		if (ok) {
+			ReserveMsg(userNick);
+			showMyMessage(userNick);
+			$("#update").click(function() {
+				updateUserMsg(userNick)
+			});
+			$("#tbody").on("click", ".delete-button", function() {
+				cancelReserve(userNick)
+			});
+			dateSelect();//拼接日期下拉选
+			$("#sure").click(function(){addReserve(userNick)});
+		}
 
-    });
-    
-    </script>
+	});
+</script>
 </head>
 
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-                <a class="navbar-brand" href="login.html">实验预约管理服务</a>
-            </div>
-            <div id="navbar" class="navbar-collapse collapse">
-                <ul class="nav navbar-nav navbar-right">
-                    <!-- <li><a href="login.html">登录</a></li> -->
-                    <li>
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                      		  登录<span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="#">信誉度&nbsp;&nbsp;&nbsp;<b>3</b></a>
-                            </li>
-                            <li class="divider"></li>
-                            <li><a href="#">注销</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <div class="container top-margin">
-        <div class="row clearfix">
-            <div class="col-md-2 column">
-            </div>
-            <div class="col-md-8 column">
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed"
+					data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+					aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="login.html">实验预约管理服务</a>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+				<ul class="nav navbar-nav navbar-right">
+					<!-- <li><a href="login.html">登录</a></li> -->
+					<li><a class="dropdown-toggle" data-toggle="dropdown" href="#">
+							登录<span class="caret"></span>
+					</a>
+						<ul class="dropdown-menu">
+							<li><a href="#">注销</a></li>
+						</ul></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<div class="container top-margin">
+		<div class="row clearfix">
+			<div class="col-md-2 column"></div>
+			<div class="col-md-8 column">
 
-                <ul id="myTab" class="nav nav-tabs">
-                    <li class="active"><a href="#mine" data-toggle="tab">我的预约</a></li>
-                    <li><a href="#reserve" data-toggle="tab">预约实验</a></li>
-                    <li><a href="#info" data-toggle="tab">我的信息</a></li>
-                </ul>
-                <div id="myTabContent" class="tab-content">
-                    <div class="tab-pane fade in active top" id="mine">
-                        <table class="table table-bordered table-hover" id="table">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        实验名称
-                                    </th>
-                                    <th>
-                                        预约日期
-                                    </th>
-                                    <th>
-                                        开始时间
-                                    </th>
-                                    <th>
-                                        结束时间
-                                    </th>
-                                    <th>
-                                        申请时间
-                                    </th>
-                                    <th>
-                                        状态
-                                    </th>
-                                    <th>
-                                        取消
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody id="tbody">
-                               
-                               
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="tab-pane fade top" id="reserve">
-                        <span>实验预约项目 :</span>
-                        <select class="btn btn-default" id="item">    
-                            <option>---</option>
-                            <option>实验A</option>
-                            <option>实验B</option>
-                            <option>实验C</option>
-                            <option>实验D</option>
-                        </select>
-                        <span>实验时长 :</span>
-                        <select class="btn btn-default" id="hour">
-                            <option>---</option>
-                            <option>2小 时</option>
-                            <option>4小 时</option>
-                            <option>6小 时</option>
-                            <option>8小 时</option>
-                        </select>
-                        <span>实验日期 :</span>
-                        <select class="btn btn-default" id="date" onchange="SelectDate()">
-                            <option>---</option>
-                        </select>
-                        <span>开始时间 :</span>
-                        <select class="btn btn-default" id="startTime">
-                            <option>---</option>
-                        </select>
-                        <button class="btn btn-default" id="sure">确定预约</button>
-                    </div>
-                    <div class="tab-pane fade top" id="info">
-                        <div class="content">
-                            <div class="wrap">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span> 用户信息 </div>
-                                    <table class="table table-bordered detail-view" id="message_table">
-                                        
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="div-right">
-                            <button class="btn btn-success" id="update">确认修改</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+				<ul id="myTab" class="nav nav-tabs">
+					<li class="active"><a href="#mine" data-toggle="tab">我的预约</a></li>
+					<li><a href="#reserve" data-toggle="tab">预约实验</a></li>
+					<li><a href="#info" data-toggle="tab">我的信息</a></li>
+				</ul>
+				<div id="myTabContent" class="tab-content">
+					<div class="tab-pane fade in active top" id="mine">
+						<table class="table table-bordered table-hover" id="table">
+							<thead>
+								<tr>
+									<th>实验名称</th>
+									<th>预约日期</th>
+									<th>开始时间</th>
+									<th>结束时间</th>
+									<th>申请时间</th>
+									<th>状态</th>
+									<th>取消</th>
+								</tr>
+							</thead>
+							<tbody id="tbody">
 
-        </div>
-        <div class="col-md-2 column">
-        </div>
-    </div>
-    </div>
-    <script>
-        function check() {
-            alert("这里是未通过审核的原因\n审核通过则提示完成或需要去完成");
-        }
-    </script>
+
+							</tbody>
+						</table>
+					</div>
+					<div class="tab-pane fade top" id="reserve">
+						<span>实验预约项目 :</span> <select class="btn btn-default" id="item">
+							<option>---</option>
+							<option>实验A</option>
+							<option>实验B</option>
+							<option>实验C</option>
+							<option>实验D</option>
+						</select> <span>实验时长 :</span> <select class="btn btn-default" id="hour">
+							<option>---</option>
+							<option>2小 时</option>
+							<option>4小 时</option>
+							<option>6小 时</option>
+							<option>8小 时</option>
+						</select> <span>实验日期 :</span> <select class="btn btn-default" id="date"
+							onchange="SelectDate()">
+							<option>---</option>
+						</select> <span>开始时间 :</span> <select class="btn btn-default"
+							id="startTime">
+							<option>---</option>
+						</select>
+						<button class="btn btn-default" id="sure">确定预约</button>
+					</div>
+					<div class="tab-pane fade top" id="info">
+						<div class="content">
+							<div class="wrap">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+										用户信息
+									</div>
+									<table class="table table-bordered detail-view"
+										id="message_table">
+
+									</table>
+								</div>
+							</div>
+						</div>
+						<div class="div-right">
+							<button class="btn btn-success" id="update">确认修改</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<div class="col-md-2 column"></div>
+	</div>
+	</div>
+	<script>
+		function check() {
+			alert("这里是未通过审核的原因\n审核通过则提示完成或需要去完成");
+		}
+	</script>
 </body>
 
 </html>

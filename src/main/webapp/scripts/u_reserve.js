@@ -226,7 +226,7 @@ function messageTable(nick,name,phone,tel,company,email,password,reputation){
 	sli += '</tr>';
 	sli += '<tr>';
 	sli += '<th>密码</th>';
-	sli += '<td><input type="text" value="'+password+'" id="password"></td>';
+	sli += '<td><input type="password" value="'+password+'" id="password"></td>';
 	sli += '</tr>';
 	sli += '<tr>';
 	sli += '<th>信誉度(不可修改)</th>';
@@ -295,16 +295,15 @@ function SelectTime(result){
 	var i;
 	var sli;
 	var $li;
-	//var startTime = map.startTime;
-	//console.log(startTime);
+	$("#startTime option").remove();
+	sli = "";
+	sli +='<option>---</option>';
 	for(i=0;i<startTime.length;i++){
-		$("#startTime option").remove();
-		sli = "";
-		sli +='<option>---</option>';
+		//console.log(startTime[i]);
 		sli +='<option>'+startTime[i]+'</option>';
-		$li = $(sli);
-		$("#startTime").append($li);
 	}
+	$li = $(sli);
+	$("#startTime").append($li);
 }
 //拼接日期下拉选
 function dateSelect() {
@@ -313,6 +312,7 @@ function dateSelect() {
 	var $li;
 	var time = [];
 	time = getNowFormatDate();
+	
 	for(i=0;i<time.length;i++){
 		sli = "";
 		sli +='<option>'+time[i]+'</option>';
@@ -362,10 +362,65 @@ function SelectDate(){
 					alert(result.msg);
 				}else if(result.status == 8){
 					SelectTime(result);
+				}else if(result.status == 9){
+					SelectTime(result);
 				}
 			},
 			error:function(){
 				alert("选择实验日期失败");
+			}
+		});
+	}
+}
+
+//添加预约
+function addReserve(userNick) {
+	var item = $("#item").val();
+	//console.log(reserveItem);
+	var hour = $("#hour").val().slice(0,1);;
+	//console.log(reserveHour);
+	var date = $("#date").val();
+	var startTime = $("#startTime").val();
+	var reputation = getCookie("userReputation");
+	//console.log(date + "-" + startTime + "-" + reputation);
+	if (item == "") {
+		ok = false;
+		alert("您没有选择实验项目");
+		return;
+	}
+	if (hour == "") {
+		ok = false;
+		alert("您没有选择时长");
+		return;
+	}
+	if (date == "") {
+		ok = false;
+		alert("您没有选择日期");
+		return;
+	}
+
+	if (ok) {
+		$.ajax({
+			url : path + "/reserve/addReserve.do",
+			type : "post",
+			data : {
+				"item" : item,
+				"hour" : hour,
+				"date" : date,
+				"startTime" : startTime,
+				"reputation" : reputation,
+				"userNick" : userNick
+			},
+			dataType : "json",
+			success : function(result) {
+				if (result.status == 0) {
+					alert(result.msg);
+				} else if (result.status == 1) {
+					alert(result.msg);
+				}
+			},
+			error : function() {
+				alert("预约失败");
 			}
 		});
 	}

@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import xust.ebs.service.set.SystemSetServiceImpl;
 import xust.ebs.util.EbsResult;
 import xust.ebs.util.EbsUtil;
 
@@ -69,10 +70,12 @@ public class test {
 	
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		Date date = sdf.parse("2017-07-15");
+		Date date = sdf.parse("2017-07-12");
 		SimpleDateFormat sdf2 = new SimpleDateFormat("EEEE");
 		String week = sdf2.format(date);
 		System.out.println(week);
+		
+
 	}
 }
 

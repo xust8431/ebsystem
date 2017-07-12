@@ -22,7 +22,8 @@ public class TestReserve {
 	public void init(){
 		String[] conf = {
 				"conf/spring-mybatis.xml",
-				"conf/spring-mvc.xml"};
+				"conf/spring-mvc.xml",
+				"conf/spring-set.xml"};
 		ac = new ClassPathXmlApplicationContext(conf);
 	}
 	
@@ -49,5 +50,12 @@ public class TestReserve {
 		ReserveService re = ac.getBean("reserveService",ReserveService.class);
 		EbsResult<List<Reserve>> result = re.selectReserveMsg("demo");
 		System.out.println(result.getData().get(0).getReserve_time());
+	}
+	
+	@Test 
+	public void test4(){
+		ReserveDao dao = ac.getBean("reserveDao",ReserveDao.class);
+		List<Reserve> re = dao.selectReserveTime("2017-07-12");
+		System.out.println(re);
 	}
 }
