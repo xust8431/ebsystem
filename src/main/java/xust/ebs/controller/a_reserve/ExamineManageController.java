@@ -18,8 +18,8 @@ public class ExamineManageController {
 	
 	@RequestMapping("/examine_true.do")
 	@ResponseBody
-	public EbsResult<Object> execute(String reserveId, String status) {
-		EbsResult<Object> result = reserveService.examineReserve(reserveId, status);
+	public EbsResult<Object> execute(String reserveId, String status, String reason) {
+		EbsResult<Object> result = reserveService.examineReserve(reserveId, status, reason);
 		return result;
 	}
 	

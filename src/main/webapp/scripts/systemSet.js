@@ -1,6 +1,7 @@
 //更新设置
 function updateSet() {
 	var token = getCookie("adminToken");
+	var adminName = getCookie("adminName");
 	var timeStr = $("#week-select").val()+"/"+$("#start").val()+"-"+$("#end").val();
 	var timeScope = $("#default-scope").val();
 	var mode = $("#mode").val();
@@ -15,6 +16,7 @@ function updateSet() {
 				type : "post",
 				data : {
 					"adminToken" : token,
+					"adminName" : adminName,
 					"timeStr" : timeStr,
 					"timeScope" : timeScope,
 					"mode" : mode
@@ -23,6 +25,8 @@ function updateSet() {
 				success : function(result) {
 					if(result.status == 0) {
 						$("#manage-li").click();
+					} else if(result.status == -1) {
+						window.location.href = path + "/login.html";
 					}
 				},
 				error : function() {
@@ -33,7 +37,8 @@ function updateSet() {
 }
 //加载设置
 function loadSet() {
-    var token = getCookie("adminToken");
+	var token = getCookie("adminToken");
+	var adminName = getCookie("adminName");
 	var ok = true;
 	$("#ban-time tr").remove();
 	if(token == null) {
@@ -45,7 +50,8 @@ function loadSet() {
 			url : path+"/set/load.do",
 			type : "post",
 			data : {
-				"adminToken" : token
+				"adminToken" : token,
+				"adminName" : adminName
 			},
 			dataType : "json",
 			success :function(result) {
@@ -74,6 +80,8 @@ function loadSet() {
 					}
 					$("#default-scope").val(timeScope);
 					$("#mode").val(mode);
+				} else if(result.status == -1) {
+					window.location.href = path + "/login.html";
 				}
 			},
 			error : function() {

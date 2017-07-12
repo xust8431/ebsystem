@@ -24,6 +24,18 @@
 <mvc:annotation-driven />
 <!-- 扫描Controller,Service组件 -->
 <context:component-scan base-package="xust.ebs"/>
+
+<!-- 拦截器配置 -->
+<!-- 排除登陆相关的请求 -->
+<mvc:interceptors>
+	<mvc:interceptor>
+		<mvc:mapping path="/**"/>
+		<mvc:exclude-mapping path="/admin/adminLogin.do"/>
+		<mvc:exclude-mapping path="/user/*"/>
+		<mvc:exclude-mapping path="/reserve/*"/>
+		<bean class="xust.ebs.interceptor.AdminInterceptor"/>
+	</mvc:interceptor>
+</mvc:interceptors>
 	
 </beans>		
 

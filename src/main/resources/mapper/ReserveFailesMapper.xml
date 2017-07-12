@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+ <mapper namespace="xust.ebs.dao.ReserveFailedDao">
+ 	<select id="findById" parameterType="string" resultType="xust.ebs.entity.ReserveFailed">
+ 		SELECT * FROM reserve_failed
+ 		WHERE reserve_failed_id=#{reserveId}
+ 	</select>
+ 	<insert id="save" parameterType="xust.ebs.entity.ReserveFailed">
+ 		INSERT INTO reserve_failed 
+ 		(reserve_failed_id,reserve_failed_reason)
+ 		VALUES (#{reserve_failed_id},#{reserve_failed_reason})
+ 	</insert>
+ </mapper>
