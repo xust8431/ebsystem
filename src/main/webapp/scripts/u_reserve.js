@@ -1,3 +1,74 @@
+//js逻辑
+var userNick = getCookie("userNick");
+var ok = true;
+$(function() {
+	if (userNick == null) {
+		ok = false;
+		alert("您还未登录，请登录后使用");
+		window.location.href = "login.html";
+		return;
+	}
+	if (ok) {
+		ReserveMsg(userNick);
+		showMyMessage(userNick);
+		$("#update").click(function() {
+			updateUserMsg(userNick)
+		});
+		$("#tbody").on("click", ".delete-button", function() {
+			cancelReserve(userNick, $(this).parents("tr"));
+		});
+		dateSelect();//拼接日期下拉选
+		$("#sure").click(function(){addReserve(userNick)});
+		
+	}
+	$("#tbody").on("click", ".reason-info", function() {
+		var $a = $(this);
+		loadReason($a);
+	});
+	$("#logout").click(function() {
+		delCookie("userNick");
+		window.location.href = path + "/login.html";
+	});   
+	
+	displayLoginFlag();
+
+});
+
+//显示登陆标志
+function displayLoginFlag() {
+	var userNick = getCookie("userNick");
+	if(userNick != null) {
+		$("#login-flag").text(userNick);
+		$("#logout a").text("注销");
+	} else {
+		$("#login-flag").text("登录");
+		$("#logout a").text("登录");
+	}
+}
+//加载审核失败原因
+function loadReason($a) {
+	var id = $a.parents("tr").data("id");
+	var ok = false;
+	if($a.text() == "审核失败") {
+		ok = true;
+	}
+	if(ok) {
+		$.ajax({
+			url : path+"/reserve/reason_info.do",
+			type : "post",
+			data : {"reserveId" : id},
+			dataType : "json",
+			success : function(result) {
+				if(result.status == 0) {
+					alert(result.data.reserve_failed_reason);
+				}
+			},
+			error : function() {
+				
+			}
+		});
+	}
+}
 //显示用户自己预约实验的信息
 function ReserveMsg(userNick){
 	$.ajax({
@@ -299,9 +370,11 @@ function SelectTime(result){
 	$("#startTime option").remove();
 	sli = "";
 	sli +='<option>---</option>';
-	for(i=0;i<startTime.length;i++){
-		//console.log(startTime[i]);
-		sli +='<option>'+startTime[i]+'</option>';
+	if(startTime != null) {
+		for(i=0;i<startTime.length;i++){
+			//console.log(startTime[i]);
+			sli +='<option>'+startTime[i]+'</option>';
+		}
 	}
 	$li = $(sli);
 	$("#startTime").append($li);
@@ -399,7 +472,7 @@ function addReserve(userNick) {
 		alert("您没有选择日期");
 		return;
 	}
-	if(startTime = "") {
+	if(startTime == "") {
 		ok = false;
 		alert("您没有选择开始时间");
 	}
@@ -419,8 +492,7 @@ function addReserve(userNick) {
 			dataType : "json",
 			success : function(result) {
 				if (result.status == 0) {
-					alert(result.msg);
-					ReserveMsg(userNick);
+					window.location.href = path + "/u_reserve.html";
 				} else if (result.status == 1) {
 					alert(result.msg);
 				}

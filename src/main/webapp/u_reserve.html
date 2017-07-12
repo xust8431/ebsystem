@@ -2,70 +2,21 @@
 <html lang="en">
 
 <head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="">
-<meta name="author" content="">
-<title>实验预约管理服务</title>
-<link href="styles/bootstrap/bootstrap.min.css" rel="stylesheet">
-<link href="styles/bootstrap/bootstrap-theme.min.css" rel="stylesheet">
-<link rel="stylesheet" href="styles/main.css">
-<script src="scripts/jquery.min.js"></script>
-<script src="scripts/bootstrap.min.js"></script>
-<script type="text/javascript" src="scripts/cookie_util.js"></script>
-<script type="text/javascript" src="scripts/basevalue.js"></script>
-<script type="text/javascript" src="scripts/u_reserve.js"></script>
-<script type="text/javascript" src="scripts/json.js"></script>
-<script type="text/javascript">
-	var userNick = getCookie("userNick");
-	var ok = true;
-	$(function() {
-		if (userNick == null) {
-			ok = false;
-			alert("您还未登录，请登录后使用");
-			window.location.href = "login.html";
-			return;
-		}
-		if (ok) {
-			ReserveMsg(userNick);
-			showMyMessage(userNick);
-			$("#update").click(function() {
-				updateUserMsg(userNick)
-			});
-			$("#tbody").on("click", ".delete-button", function() {
-				cancelReserve(userNick, $(this).parents("tr"));
-			});
-			dateSelect();//拼接日期下拉选
-			$("#sure").click(function(){addReserve(userNick)});
-			
-		}
-		$("#tbody").on("click", ".reason-info", function() {
-			var id = $(this).parents("tr").data("id");
-			var ok = false;
-			if($(this).text() == "审核失败") {
-				ok = true;
-			}
-			if(ok) {
-				$.ajax({
-					url : path+"/reserve/reason_info.do",
-					type : "post",
-					data : {"reserveId" : id},
-					dataType : "json",
-					success : function(result) {
-						if(result.status == 0) {
-							alert(result.data.reserve_failed_reason);
-						}
-					},
-					error : function() {
-						
-					}
-				});
-			}
-		});
-
-	});
-</script>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<title>实验预约管理服务</title>
+	<link href="styles/bootstrap/bootstrap.min.css" rel="stylesheet">
+	<link href="styles/bootstrap/bootstrap-theme.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="styles/main.css">
+	<script src="scripts/jquery.min.js"></script>
+	<script src="scripts/bootstrap.min.js"></script>
+	<script type="text/javascript" src="scripts/cookie_util.js"></script>
+	<script type="text/javascript" src="scripts/basevalue.js"></script>
+	<script type="text/javascript" src="scripts/u_reserve.js"></script>
+	<script type="text/javascript" src="scripts/json.js"></script>
 </head>
 
 <body>
@@ -84,12 +35,15 @@
 			<div id="navbar" class="navbar-collapse collapse">
 				<ul class="nav navbar-nav navbar-right">
 					<!-- <li><a href="login.html">登录</a></li> -->
-					<li><a class="dropdown-toggle" data-toggle="dropdown" href="#">
-							登录<span class="caret"></span>
-					</a>
-						<ul class="dropdown-menu">
-							<li><a href="#">注销</a></li>
-						</ul></li>
+					<li>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="" id="login-flag">
+                        	<span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="divider"></li>
+                            <li id="logout"><a href="javascript:;"></a></li>
+                        </ul>
+                    </li>
 				</ul>
 			</div>
 		</div>

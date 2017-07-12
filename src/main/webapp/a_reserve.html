@@ -18,65 +18,6 @@
     <script src="scripts/basevalue.js" type="text/javascript"></script>
     <script src="scripts/a_reserve.js" type="text/javascript"></script>
     <script src="scripts/systemSet.js" type="text/javascript"></script>
-    <script type="text/javascript">
-    	var status = 1;
-    	$(function() {
-    		//点击<a>改变查询状态
-    		$("#a1").click(function(){
-    			$("#select-status a").removeClass("active");
-    			$(this).addClass("active");
-    			status = 1;
-    			loadReserve();
-    		});
-    		$("#a2").click(function(){
-    			$("#select-status a").removeClass("active");
-    			$(this).addClass("active");
-    			status = 2;
-    			loadReserve();
-    		});
-    		$("#a3").click(function(){
-    			$("#select-status a").removeClass("active");
-    			$(this).addClass("active");
-    			status = 3;
-    			loadReserve();
-    		});
-    		$("#reserve-table").on("click", ".examine_true", function() {
-    			var id = $(this).parents("tr").data("reserveId");
-    			examine(id, 1);
-    		});
-    		$("#reserve-table").on("click", ".examine_false", function() {
-    			var id = $(this).parents("tr").data("reserveId");
-    			examine(id, 2);
-    		});
-    		$("#reserve-table").on("click", ".completed", completed);
-    		
-    		$("#reserve-li").click(function() {
-    			loadReserve();
-    		});
-    		$("#userinfo-li").click(function() {
-    			loadUserinfo();
-    		});
-    		$("#manage-li").click(function() {
-    			loadSet();
-    		});
-    		$("#sure-set").click(function() {
-    			updateSet();
-    		});
-    		$("#ban-time").on("click", ".delete-set", function() {
-    			var $tr = $(this).parents("tr");
-    			deleteSet($tr);
-    		});
-    		$("#logout").click(function() {
-    			delCookie("adminToken");
-    			delCookie("adminName");
-    			window.location.href = path + "/login.html";
-    		});   		
-    		
-    		displayLoginFlag();
-    		$("#a1").click();
-    		
-    	});
-    </script>
 </head>
 
 <body>
