@@ -29,13 +29,11 @@ public class ReserveServiceImpl implements ReserveService {
 
 	@Resource
 	private ReserveDao reserveDao;
+	@Resource
+	private ReserveFailedDao reserveFailedDao;
 
 	@Resource
 	private Properties timeset;
-
-	// 预约实验
-	@Resource
-	private ReserveFailedDao reserveFailedDao;
 	
 	//预约实验
 	public EbsResult<Object> addReserveMsg(String userNick, String item, String hour, String date, String startTime,
@@ -51,9 +49,16 @@ public class ReserveServiceImpl implements ReserveService {
 				reserve.setReserve_date(d);
 				SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm:ss");
 				Time start = new Time(sdf2.parse(startTime).getTime());
-				reserve.setReserve_starttime(start);	
-				String endTime = start.getHours() + Integer.valueOf(hour) + ":00:00";
-				Time end = new Time(sdf2.parse(endTime).getTime());
+				reserve.setReserve_starttime(start);
+				String endTime = null;
+				Time end;
+				if(Integer.valueOf(hour) >= 6){
+					endTime = start.getHours() + Integer.valueOf(hour) + 2 + ":00:00";
+					end = new Time(sdf2.parse(endTime).getTime());
+				}else{
+					endTime = start.getHours() + Integer.valueOf(hour) + ":00:00";
+					end = new Time(sdf2.parse(endTime).getTime());
+				}
 				reserve.setReserve_endtime(end);
 				reserve.setReserve_examine_status("0");
 				reserve.setReserve_hour(Integer.valueOf(hour));
@@ -338,6 +343,20 @@ public class ReserveServiceImpl implements ReserveService {
 		}
 		result.setStatus(9);
 		result.setMsg("指定时间有误");
+		return result;
+	}
+
+	public EbsResult<ReserveFailed> selectReasonInfo(String reserveId) {
+		EbsResult<ReserveFailed> result = new EbsResult<ReserveFailed>();
+		ReserveFailed reserve = reserveFailedDao.findById(reserveId);
+		if(reserve != null) {
+			result.setStatus(0);
+			result.setMsg("查询成功");
+			result.setData(reserve);
+			return result;
+		}
+		result.setStatus(1);
+		result.setMsg("没有记录");
 		return result;
 	}
 }

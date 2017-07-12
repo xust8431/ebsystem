@@ -36,7 +36,7 @@ function ReserveMsg(userNick){
                         sli += json2TimeStamp(time);
                         sli += ' </td>';
                         sli += '<td>';
-                        sli += '   <a href="javascript:check();">已完成</a>';
+                        sli += '   <a class="reason-info" href="javascript:;">已完成</a>';
                         sli += '</td>';
                         sli += '<td>';
                         sli += '</td>';
@@ -62,12 +62,13 @@ function ReserveMsg(userNick){
 	                        sli += json2TimeStamp(time);
 	                        sli += ' </td>';
 	                        sli += '<td>';
-	                        sli += '   <a href="javascript:check();">审核失败</a>';
+	                        sli += '   <a class="reason-info" href="javascript:;">审核失败</a>';
 	                        sli += '</td>';
 	                        sli += '<td>';
 	                        sli += '</td>';
 	                        sli += '</tr>';
 	                        $li = $(sli);
+	                        $li.data("id",id);
 	                        $("#tbody").append($li);
 					}
 					if(datas[i].reserve_examine_status == 1 && datas[i].reserve_complete_status == 0 ){
@@ -88,7 +89,7 @@ function ReserveMsg(userNick){
                         sli += json2TimeStamp(time);
                         sli += ' </td>';
                         sli += '<td>';
-                        sli += '   <a href="javascript:check();">未完成</a>';
+                        sli += '   <a class="reason-info" href="javascript:;">未完成</a>';
                         sli += '</td>';
                         sli += '<td>';
                         sli += ' <button class="btn btn-warning btn-xs delete-button">';
@@ -119,7 +120,7 @@ function ReserveMsg(userNick){
                         sli += json2TimeStamp(time);
                         sli += ' </td>';
                         sli += '<td>';
-                        sli += '   <a href="javascript:check();">待审核</a>';
+                        sli += '   <a class="reason-info" href="javascript:;">待审核</a>';
                         sli += '</td>';
                         sli += '<td>';
                         sli += ' <button class="btn btn-warning btn-xs delete-button">';
@@ -149,7 +150,7 @@ function ReserveMsg(userNick){
                         sli += json2TimeStamp(time);
                         sli += ' </td>';
                         sli += '<td>';
-                        sli += '   <a href="javascript:check();">已取消</a>';
+                        sli += '   <a class="reason-info" href="javascript:;">已取消</a>';
                         sli += '</td>';
                         sli += '<td>';
                         sli += '</td>';
@@ -265,10 +266,11 @@ function updateUserMsg(userNick){
 		}
 	});
 }
-
-function cancelReserve(userNick){
-	var id = $(this).parents("tr").data("id");
-	var date = $(this).parent().parent().find("td").eq(1).text();
+//取消预约
+function cancelReserve(userNick, $tr){
+	var id = $tr.data("id");
+	var date = $tr.find("td").eq(1).text();
+	alert(id + ":" + date);
 	$.ajax({
 		url:path+"/reserve/updateCancel.do",
 		type:"post",
@@ -278,7 +280,6 @@ function cancelReserve(userNick){
 			if(result.status == 0){
 				$("#tbody tr").remove();
 				ReserveMsg(userNick);
-				alert(result.msg);
 			}else if(result.status == 1){
 				alert(result.msg);
 			}
@@ -398,6 +399,10 @@ function addReserve(userNick) {
 		alert("您没有选择日期");
 		return;
 	}
+	if(startTime = "") {
+		ok = false;
+		alert("您没有选择开始时间");
+	}
 
 	if (ok) {
 		$.ajax({
@@ -415,6 +420,7 @@ function addReserve(userNick) {
 			success : function(result) {
 				if (result.status == 0) {
 					alert(result.msg);
+					ReserveMsg(userNick);
 				} else if (result.status == 1) {
 					alert(result.msg);
 				}

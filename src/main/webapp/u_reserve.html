@@ -34,11 +34,35 @@
 				updateUserMsg(userNick)
 			});
 			$("#tbody").on("click", ".delete-button", function() {
-				cancelReserve(userNick)
+				cancelReserve(userNick, $(this).parents("tr"));
 			});
 			dateSelect();//拼接日期下拉选
 			$("#sure").click(function(){addReserve(userNick)});
+			
 		}
+		$("#tbody").on("click", ".reason-info", function() {
+			var id = $(this).parents("tr").data("id");
+			var ok = false;
+			if($(this).text() == "审核失败") {
+				ok = true;
+			}
+			if(ok) {
+				$.ajax({
+					url : path+"/reserve/reason_info.do",
+					type : "post",
+					data : {"reserveId" : id},
+					dataType : "json",
+					success : function(result) {
+						if(result.status == 0) {
+							alert(result.data.reserve_failed_reason);
+						}
+					},
+					error : function() {
+						
+					}
+				});
+			}
+		});
 
 	});
 </script>
@@ -147,12 +171,7 @@
 		</div>
 		<div class="col-md-2 column"></div>
 	</div>
-	</div>
-	<script>
-		function check() {
-			alert("这里是未通过审核的原因\n审核通过则提示完成或需要去完成");
-		}
-	</script>
+
 </body>
 
 </html>
