@@ -472,7 +472,7 @@ function addReserve(userNick) {
 		alert("您没有选择日期");
 		return;
 	}
-	if(startTime == "") {
+	if(startTime == "---") {
 		ok = false;
 		alert("您没有选择开始时间");
 	}

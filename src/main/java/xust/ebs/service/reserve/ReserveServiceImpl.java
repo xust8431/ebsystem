@@ -215,7 +215,7 @@ public class ReserveServiceImpl implements ReserveService {
 		Time t = new Time(sdf3.parse(time).getTime());
 		List<String> startTime = new ArrayList<String>();
 		if ("星期五".equals(week)) {// 是否是星期五
-			if (re.size() == 0) {
+			if (re.size() != 0) {
 				for (int i = 0; i < re.size(); i++) {
 					if (re.get(i).getReserve_hour() == 2
 							&& sdf3.format(re.get(i).getReserve_starttime()).equals(time)) {// 判断时长为2并且8点被用
@@ -227,13 +227,14 @@ public class ReserveServiceImpl implements ReserveService {
 						result.setMsg("星期五上午如果8点被用");
 						result.setData(startTime);
 						result.setStatus(0);
-						return result;
+						//return result;
 					} else if (re.get(i).getReserve_hour() == 4) {
 						result.setStatus(1);
 						result.setMsg("周五上午已经没时间了");
-						return result;
+						//return result;
 					}
 				}
+				return result;
 			} else {
 				switch (Integer.valueOf(reserveHour)) {
 				case 2:
