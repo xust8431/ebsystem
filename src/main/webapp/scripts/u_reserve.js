@@ -341,7 +341,7 @@ function updateUserMsg(userNick){
 function cancelReserve(userNick, $tr){
 	var id = $tr.data("id");
 	var date = $tr.find("td").eq(1).text();
-	alert(id + ":" + date);
+	//alert(id + ":" + date);
 	$.ajax({
 		url:path+"/reserve/updateCancel.do",
 		type:"post",
